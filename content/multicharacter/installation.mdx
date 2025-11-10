@@ -1,0 +1,60 @@
+import { Callout } from 'nextra/components'
+
+# Installation
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>Basic installation instructions for prism_multicharacter</div>
+
+## ESX Installation
+
+### Removing `esx_multicharacter`
+Make sure to totally remove esx_multicharacter from `/resources/[core]/`
+
+### Changing es_extended config
+Firstly, we need to apply the changes to the config file.
+
+If you're on ESX Legacy 1.12 and above find `es_extended/shared/config/main.lua`
+Any other version, go to `es_extended/config.lua`
+
+Find this variable:
+
+```lua
+Config.Multichar = GetResourceState("esx_multicharacter") ~= "missing"
+```
+
+And change it to:
+
+```lua
+Config.Multichar = true
+```
+
+Now you applied the core changes to the framework!
+
+### Installing the resource
+
+Drag resource into your `/resources` folder.
+
+
+## QBCore Installation
+
+### Removing `qb-multicharacter`
+Make sure to totally remove qb-multicharacter from `/resources/[qb]/`
+
+### Installing the resource
+
+Drag resource into your `/resources` folder.
+
+## Qbox Installation
+
+### Disabling QBOX default Multicharacter
+
+Headover to the `/qbx-core/config/client.lua` and set at line 8
+
+```lua
+useExternalCharacters = true
+```
+
+### Installing the resource
+Drag resource into your `/resources` folder.

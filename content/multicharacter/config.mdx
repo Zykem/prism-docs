@@ -1,0 +1,133 @@
+# Config
+
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>All Prism Scripts contain various editable and unobscured files containing, exports, client<br/> and server functions, configuration methods and more.</div>
+
+```lua filename="config.lua" copy
+Config = {}
+
+Config.FrameWork = 'qbx' -- qbx, qb, esx
+Config.IdentifierType = 'license' -- steam , discord, license
+Config.Appearance = 'rcore_clothing' -- 'fivem-appearance', 'illenium-appearance', 'qb-clothing', 'skinchanger', 'crm-appearance', 'bl_appearance', 'tgiann-clothing', 'rcore_clothing', 'dx_clothing', 'karma_clothing'
+Config.FreeSlots = 2 -- Free slots for each player
+Config.Prefix = 'char' -- Prefix for character creation ( Only for ESX )
+Config.DefaultSpawn = vec4(-1041.7906, -2745.0769, 21.3594, 331.8917) -- Default spawn for new characters
+Config.LogoUrl = 'https://ik.imagekit.io/boqjrvwdo/Group_1317.png?updatedAt=1755702205908'
+Config.UseSpawnSelector = false -- Use spawn selector for multicharacter
+Config.ImageSize = 20 -- logo size for multicharacter
+Config.EnableDeleteButton = false -- Enable or disable delete button
+Config.UseBuckets = {
+    enabled = true, -- Use buckets for multicharacter
+    defaultBucket = 0, -- Default bucket for players
+}
+
+Config.CommandConfigs = {
+    logout = { -- IsAllowedtoLogout checkout this function on sv_bridge.lua for adding permissions
+        enabled = true, -- Enable or disable logout command
+        command = 'relog', -- Command to logout
+    },
+    setslot = { -- IsAllowedtoSetslot checkout this function on sv_bridge.lua for adding permissions
+        enabled = true, -- Enable or disable setslot command
+        command ='setslot', -- Command to set slot
+    }
+}
+
+Config.UsePhoneNumber = {
+    enable = false,
+    phone_resource = 'gks' -- gks , 'qs', 'lb', 'yseries'
+}
+
+Config.CamSettings = { -- Camera settings for multicharacter
+    camCoords = vec4(912.1345, 0.7228, 111.7, 228.9722),
+    camRot = vec4(0.0, 0.0, 231.9001, 0.0),
+}
+
+Config.Animations = { -- Pre defined animations for each character ( Must define coords here if u are using more character slot )
+    [1] = {
+        coords = vec4(-996.5760, -764.8577, 69.5091, 193.3857),
+        anim = {
+            dict = 'timetable@ron@ig_3_couch',
+            clip = 'base',
+        },
+        CameraCoordOffset = vec3(0.0, 0.0, 0.0),
+        FocusCoordOffset = vec3(0.0, 0.0, 0.0),
+    },
+    [2] = {
+        coords = vec4(-994.1319, -755.7526, 69.4941, 302.6772),
+        anim = {
+            dict = 'mini@telescope',
+            clip = 'idle',
+        },
+        CameraCoordOffset = vec3(-3.0, 3.0, 0.0),
+        FocusCoordOffset = vec3(0.0, 0.0, 0.0),
+    },
+    [3] = { -- Character 1 Animation
+        coords = vec4(-997.5423, -755.2741, 70.2000, 177.8425),
+        anim = {
+            dict = 'anim@amb@nightclub@lazlow@lo_sofa@',
+            clip = 'lowsofa_base_laz',
+        },
+        CameraCoordOffset = vec3(0.0, 0.0, -0.5),
+        FocusCoordOffset = vec3(0.0, 0.0, -0.7),
+    },
+    [4] = {
+        coords = vec4(-999.2, -762.0, 70.0, 183.9616),
+        anim = {
+            dict = 'timetable@ron@ig_3_couch',
+            clip = 'base',
+        },
+        CameraCoordOffset = vec3(0.0, 0.0, 0.0),
+        FocusCoordOffset = vec3(0.0, 0.0, 0.0),
+    }
+}
+
+Config.StarterItems = { -- Starter items for new characters ( Put false if u want to disable it )
+    {
+        name = "id_card",
+        amount = 1,
+    },
+    {
+        name = "driver_license",
+        amount = 1,
+    },
+}
+
+Config.Customization = {
+    texts = {
+        title_1 = 'IDENTITY',
+        title_2 = 'CREATOR',
+        creation_description = 'Please fill in the following information to the government.',
+        input_firstName = 'First Name',
+        firstName_placeholder = 'Enter a first name...',
+        input_lastName = 'Last Name',
+        secondName_placeholder = 'Enter a second name...',
+        input_gender = 'Gender',
+        gender_placeholder = 'Enter a gender...',
+        male = 'Male',
+        female = 'Female',
+        input_dob = 'Date of Birth',
+        nationality = 'Nationality',
+        search_nationality = 'Search nationality...',
+        nationality_label = 'Select nationality...',
+        nationality_error = 'No nationality found.',
+        charactercount_header = 'CHARACTER',
+        charactercount_description = 'Lorem ipsum dolor sit amet consectetur. Dolor integer a sit senectus vestibulum et tempor consequat odio.',
+        char_details_header = 'DETAILS',
+        details_sex = 'SEX',
+        details_cash = 'CASH',
+        details_bank = 'BANK',
+        details_age = 'AGE',
+        details_job = 'JOB',
+        details_phone = 'PHONE',
+        delete_title = 'DELETE',
+        delete_subtitle = 'CHARACTER',
+        delete_description = 'Lorem ipsum dolor sit amet consectetur. Quisque pellentesque elementum amet netus.'
+    },
+    theme = {
+        primaryColor = '#BEEE11'
+    }
+}
+```
