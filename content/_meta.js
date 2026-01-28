@@ -144,4 +144,13 @@ export default {
       collapsed: true
     },
   },
+  advancedhud: {
+    title: '🕹️ Prism Advanced HUD',
+    theme: {
+      breadcrumb: false,
+      pagination: true,
+      copyPage: false,
+      collapsed: true
+    },
+  },
 }
