@@ -81,6 +81,15 @@ export default {
       collapsed: true
     },
   },
+  billing: {
+    title: '💳 Prism Billing',
+    theme: {
+      breadcrumb: false,
+      pagination: true,
+      copyPage: false,
+      collapsed: true
+    },
+  },
   blackmarket: {
     title: '🛒 Prism Black Market',
     theme: {
@@ -162,6 +171,15 @@ export default {
       collapsed: true
     },
   },
+  deluxereward: {
+    title: '🎁 Prism Deluxe Reward',
+    theme: {
+      breadcrumb: false,
+      pagination: true,
+      copyPage: false,
+      collapsed: true
+    },
+  },
   radio: {
     title: '🔊 Prism Radio',
     theme: {
@@ -170,5 +188,5 @@ export default {
       copyPage: false,
       collapsed: true
     },
-  }
+  },
 }
