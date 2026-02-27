@@ -69,3 +69,39 @@ Set HUD UI hidden state.
 ---@param state boolean
 exports['prism-hudv2']:SetHudHidden(state)
 ```
+
+### SetCustomStat
+Set a custom stat bar value. The stat must be defined in `Config.CustomStats`.
+
+```lua copy
+---@param statId string -- The custom stat id from config
+---@param value number -- The new value (0-100)
+exports['prism-hudv2']:SetCustomStat(statId, value)
+```
+
+### GetCustomStat
+Get the current value of a custom stat bar.
+
+```lua copy
+---@param statId string -- The custom stat id from config
+---@return number
+local value = exports['prism-hudv2']:GetCustomStat(statId)
+```
+
+### UpdatePlayerInfoField
+Set a custom player info field value. The field must be defined in `Config.CustomInfoFields`.
+
+```lua copy
+---@param fieldId string -- The custom info field id from config
+---@param value string -- The new text value to display
+exports['prism-hudv2']:UpdatePlayerInfoField(fieldId, value)
+```
+
+### GetPlayerInfoField
+Get the current value of a custom player info field.
+
+```lua copy
+---@param fieldId string -- The custom info field id from config
+---@return string
+local value = exports['prism-hudv2']:GetPlayerInfoField(fieldId)
+```
