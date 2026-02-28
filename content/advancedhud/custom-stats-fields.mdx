@@ -1,0 +1,409 @@
+import { Callout } from 'nextra/components'
+
+# Custom Stats & Info Fields
+
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>Add custom stat bars and player info fields to the HUD without touching any UI code. Everything is config-driven.</div>
+
+Prism Advanced HUD supports two powerful config-driven systems that let you extend the HUD with your own custom elements:
+
+- **Custom Stat Bars** — additional status bars (e.g., hygiene, addiction, radiation) that appear alongside the built-in stats (health, armour, hunger, etc.)
+- **Custom Info Fields** — additional player info displays (e.g., gang, phone number, department) that appear alongside the built-in info elements (ID, job, bank/cash, etc.)
+
+Both systems are fully config-driven. Define them in `config.lua`, update their values from any resource using exports or state bags — no UI code changes required.
+
+---
+
+## Custom Stat Bars
+
+### Configuration
+
+Add custom stat bars to the `Config.CustomStats` table in `shared/config.lua`:
+
+```lua filename="shared/config.lua" copy
+Config.CustomStats = {
+    {
+        id = 'hygiene',
+        label = 'Hygiene',
+        icon = 'droplet',
+        defaultValue = 100,
+        defaultColors = { progress = '#87CEEB', icon = '#87CEEB', background = '#87CEEB' },
+        stateBag = 'hygiene',
+    },
+    {
+        id = 'stress_level',
+        label = 'Addiction',
+        icon = 'pill',
+        defaultValue = 0,
+        defaultColors = { progress = '#FF6B6B', icon = '#FF6B6B', background = '#FF6B6B' },
+        stateBag = nil,
+    },
+}
+```
+
+### Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `id` | string | Yes | Unique identifier for this stat. Used in exports and internally. Must be unique across all custom stats. |
+| `label` | string | Yes | Display name shown in the HUD settings color picker. |
+| `icon` | string | Yes | Icon to display. Can be a preset name (see table below) or a raw SVG path data string. |
+| `defaultValue` | number | Yes | Initial value when the resource starts (0–100). |
+| `defaultColors` | table | Yes | Default colors for the stat bar. Contains `progress`, `icon`, and `background` hex color strings. |
+| `stateBag` | string | No | If set, the stat will automatically update when this player state bag key changes. Set to `nil` to disable. |
+
+<Callout type="info">
+  Players can customize the colors of each custom stat bar individually through the HUD Settings menu, just like the built-in stats.
+</Callout>
+
+### Preset Icons
+
+The following preset icon names are available for stat bars. Use the name string as the `icon` value.
+
+| Icon Name | Description |
+|-----------|-------------|
+| `droplet` | Water droplet |
+| `bolt` | Lightning bolt |
+| `leaf` | Leaf / nature |
+| `shield` | Shield / protection |
+| `star` | Star |
+| `pill` | Pill / medicine |
+| `flame` | Fire / flame |
+| `moon` | Moon / night |
+| `sun` | Sun / day |
+| `skull` | Skull / danger |
+| `brain` | Brain / mental |
+| `eye` | Eye / vision |
+| `dumbbell` | Dumbbell / fitness |
+| `cigarette` | Cigarette / smoking |
+| `beer` | Beer mug / alcohol |
+
+### Custom SVG Icons
+
+If the preset icons don't fit your needs, you can pass a raw SVG path data string directly as the `icon` value:
+
+```lua filename="shared/config.lua" copy
+{
+    id = 'radiation',
+    label = 'Radiation',
+    icon = 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z',
+    defaultValue = 0,
+    defaultColors = { progress = '#00FF00', icon = '#00FF00', background = '#00FF00' },
+},
+```
+
+<Callout type="warning">
+  When using raw SVG path data, the icon should be designed for a **24x24 viewBox**. The path will be rendered with `fill` (not `stroke`), so use filled path data.
+</Callout>
+
+### Exports
+
+Update and read custom stat values from any resource:
+
+#### SetCustomStat
+
+Set the value of a custom stat bar.
+
+```lua copy
+---@param statId string -- The id of the custom stat (as defined in config)
+---@param value number -- The new value (0-100)
+exports['prism-hudv2']:SetCustomStat(statId, value)
+```
+
+**Example:**
+```lua copy
+-- Set hygiene to 75%
+exports['prism-hudv2']:SetCustomStat('hygiene', 75)
+
+-- Decrease hygiene by 10
+local current = exports['prism-hudv2']:GetCustomStat('hygiene')
+exports['prism-hudv2']:SetCustomStat('hygiene', current - 10)
+```
+
+#### GetCustomStat
+
+Get the current value of a custom stat bar.
+
+```lua copy
+---@param statId string -- The id of the custom stat
+---@return number -- The current value
+local value = exports['prism-hudv2']:GetCustomStat(statId)
+```
+
+**Example:**
+```lua copy
+local hygiene = exports['prism-hudv2']:GetCustomStat('hygiene')
+print('Current hygiene:', hygiene)
+```
+
+### State Bag Integration
+
+If you set the `stateBag` property on a custom stat, the HUD will automatically listen for changes to that player state bag key and update the stat bar in real time — no export calls needed.
+
+```lua filename="server-side example" copy
+-- From any server-side script, set the state bag:
+local player = exports.qbx_core:GetPlayer(source)
+Player(source).state:set('hygiene', 80, true)
+```
+
+```lua filename="shared/config.lua" copy
+-- The config entry with stateBag:
+{
+    id = 'hygiene',
+    label = 'Hygiene',
+    icon = 'droplet',
+    defaultValue = 100,
+    defaultColors = { progress = '#87CEEB', icon = '#87CEEB', background = '#87CEEB' },
+    stateBag = 'hygiene', -- Matches the state bag key above
+},
+```
+
+<Callout type="info">
+  You can use both state bags and exports together. State bag changes update the value automatically, and you can still call `SetCustomStat` to override or adjust the value from the client side.
+</Callout>
+
+---
+
+## Custom Player Info Fields
+
+### Configuration
+
+Add custom info fields to the `Config.CustomInfoFields` table in `shared/config.lua`:
+
+```lua filename="shared/config.lua" copy
+Config.CustomInfoFields = {
+    {
+        id = 'gang',
+        label = 'Gang',
+        icon = 'users',
+        dataPath = 'gang.label',
+        defaultValue = 'None',
+        stateBag = nil,
+    },
+    {
+        id = 'phone',
+        label = 'Phone',
+        icon = 'phone',
+        dataPath = nil,
+        defaultValue = 'No Phone',
+        stateBag = 'phone_number',
+    },
+}
+```
+
+### Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `id` | string | Yes | Unique identifier for this field. Used in exports and internally. |
+| `label` | string | Yes | Display label (used internally for identification). |
+| `icon` | string | Yes | Icon to display. Can be a preset name (see table below) or a raw SVG path data string. |
+| `dataPath` | string | No | Dot-notation path into `PlayerData` to auto-read the value each tick. Framework-specific (e.g., `gang.label` for QBCore/Qbox). Set to `nil` to disable. |
+| `defaultValue` | string | Yes | Default text displayed when no value has been set. |
+| `stateBag` | string | No | If set, the field will automatically update when this player state bag key changes. Set to `nil` to disable. |
+
+<Callout type="info">
+  Custom info fields inherit the shared player info styling (background color, icon color, text color, border radius) from the HUD settings. No separate color settings are needed.
+</Callout>
+
+### Preset Icons
+
+The following preset icon names are available for info fields. Use the name string as the `icon` value.
+
+| Icon Name | Description |
+|-----------|-------------|
+| `users` | Group of people |
+| `coins` | Coins / currency |
+| `phone` | Phone |
+| `badge` | Badge / shield |
+| `hash` | Hash / number sign |
+| `briefcase` | Briefcase / work |
+| `building` | Building / property |
+| `car` | Car / vehicle |
+| `clock` | Clock / time |
+| `globe` | Globe / world |
+| `heart` | Heart / health |
+| `key` | Key / access |
+| `map` | Map / location |
+| `tag` | Tag / label |
+| `wallet` | Wallet / money |
+
+### Custom SVG Icons
+
+Same as custom stats — you can pass a raw SVG path data string for full icon customization:
+
+```lua filename="shared/config.lua" copy
+{
+    id = 'department',
+    label = 'Department',
+    icon = 'M12 2L3 7v6c0 5.25 3.85 10.15 9 11.28 5.15-1.13 9-6.03 9-11.28V7l-9-5Z',
+    defaultValue = 'Civilian',
+},
+```
+
+<Callout type="warning">
+  Preset icons use **stroke-based** rendering (outlined style). Raw SVG path data uses **fill-based** rendering (solid style). Design your custom paths accordingly with a **24x24 viewBox**.
+</Callout>
+
+### Exports
+
+Update and read custom info field values from any resource:
+
+#### UpdatePlayerInfoField
+
+Set the value of a custom info field.
+
+```lua copy
+---@param fieldId string -- The id of the custom info field (as defined in config)
+---@param value string -- The new text value to display
+exports['prism-hudv2']:UpdatePlayerInfoField(fieldId, value)
+```
+
+**Example:**
+```lua copy
+-- Set gang display
+exports['prism-hudv2']:UpdatePlayerInfoField('gang', 'Ballas - OG')
+
+-- Set phone number
+exports['prism-hudv2']:UpdatePlayerInfoField('phone', '555-0199')
+```
+
+#### GetPlayerInfoField
+
+Get the current value of a custom info field.
+
+```lua copy
+---@param fieldId string -- The id of the custom info field
+---@return string -- The current value
+local value = exports['prism-hudv2']:GetPlayerInfoField(fieldId)
+```
+
+**Example:**
+```lua copy
+local gang = exports['prism-hudv2']:GetPlayerInfoField('gang')
+print('Current gang:', gang)
+```
+
+### DataPath (Auto-Read from PlayerData)
+
+The `dataPath` property lets you automatically read a value from the player's framework data every tick, without needing export calls. Use dot-notation to traverse nested tables.
+
+```lua filename="shared/config.lua" copy
+{
+    id = 'gang',
+    label = 'Gang',
+    icon = 'users',
+    dataPath = 'gang.label', -- Reads PlayerData.gang.label
+    defaultValue = 'None',
+},
+```
+
+**How it works:** Each tick, the HUD reads `PlayerData.gang.label` and displays the value. If the path doesn't exist or is `nil`, the `defaultValue` is shown instead.
+
+**Common dataPath examples (QBCore / Qbox):**
+
+| dataPath | Value Read |
+|----------|------------|
+| `gang.label` | Player's gang name |
+| `gang.grade.name` | Player's gang rank name |
+| `job.label` | Player's job name |
+| `job.grade.name` | Player's job rank name |
+| `charinfo.firstname` | Player's first name |
+| `charinfo.phone` | Player's phone number |
+| `metadata.licences.driver` | Player's driver license status |
+
+<Callout type="warning">
+  The `dataPath` values are **framework-specific**. The paths above are examples for QBCore / Qbox. If you use ESX, your data structure may differ (e.g., `job.label` works, but `gang` may not exist natively).
+</Callout>
+
+### State Bag Integration
+
+Same as custom stats — set the `stateBag` property to auto-listen for player state bag changes:
+
+```lua filename="server-side example" copy
+-- From any server-side script:
+Player(source).state:set('phone_number', '555-0199', true)
+```
+
+```lua filename="shared/config.lua" copy
+{
+    id = 'phone',
+    label = 'Phone',
+    icon = 'phone',
+    stateBag = 'phone_number', -- Matches the state bag key above
+    defaultValue = 'No Phone',
+},
+```
+
+---
+
+## Positioning & Edit Mode
+
+Custom stat bars and info fields are **automatically positioned** when they first appear:
+
+- **Custom stat bars** are placed in a row to the right of the built-in stats (health, armour, hunger, thirst, stress, stamina/oxygen), with a 45px gap between each.
+- **Custom info fields** are placed in a column below the built-in player info elements (voice, job time, bank/cash, ID, radio, weapon), with a 40px gap between each.
+
+<Callout type="info">
+  Players can reposition any custom element using **Edit Mode** (accessible from HUD Settings). Custom elements are fully draggable and resizable, just like the built-in HUD elements. Saved positions persist across sessions.
+</Callout>
+
+---
+
+## Full Example
+
+Here's a complete example adding a `hygiene` stat bar and a `gang` info field:
+
+```lua filename="shared/config.lua" copy
+Config.CustomStats = {
+    {
+        id = 'hygiene',
+        label = 'Hygiene',
+        icon = 'droplet',
+        defaultValue = 100,
+        defaultColors = { progress = '#87CEEB', icon = '#87CEEB', background = '#87CEEB' },
+        stateBag = 'hygiene',
+    },
+}
+
+Config.CustomInfoFields = {
+    {
+        id = 'gang',
+        label = 'Gang',
+        icon = 'users',
+        dataPath = 'gang.label',
+        defaultValue = 'None',
+        stateBag = nil,
+    },
+}
+```
+
+Then from any other resource:
+
+```lua filename="client-side usage" copy
+-- Decrease hygiene over time
+CreateThread(function()
+    while true do
+        Wait(60000) -- Every minute
+        local current = exports['prism-hudv2']:GetCustomStat('hygiene')
+        if current > 0 then
+            exports['prism-hudv2']:SetCustomStat('hygiene', math.max(0, current - 5))
+        end
+    end
+end)
+```
+
+```lua filename="server-side usage (state bag)" copy
+-- Update hygiene via state bag from server
+RegisterCommand('sethygiene', function(source, args)
+    local value = tonumber(args[1]) or 100
+    Player(source).state:set('hygiene', value, true)
+end, true)
+```
+
+<Callout type="info">
+  After adding or removing custom stats/info fields from the config, restart the `prism-hudv2` resource for the changes to take effect. No rebuild is needed — definitions are loaded from `config.lua` at resource start.
+</Callout>

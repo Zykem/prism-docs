@@ -11,6 +11,12 @@ export default {
             copyPage: false
         }
     },
+    'custom-stats-fields': {
+        title: 'Custom Stats & Fields',
+        theme: {
+            copyPage: false
+        }
+    },
     exports: {
         title: 'Exports',
         theme: {
