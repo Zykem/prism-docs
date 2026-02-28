@@ -14,7 +14,7 @@ import Image from 'next/image'
 > - Must provide if there is no description.
 - description?: `string`
 > - Must provide if there is no title.
-> - Markdown support
+> - Markdown support (You can use \n to break line, or set custom color)
 - duration?: `number`
 > - Default: ``3000``
 - showDuration?: `boolean`
@@ -26,7 +26,8 @@ import Image from 'next/image'
 - icon?: `string`
 > - Font Awesome 6 icon name
 - iconAnimation?: `'spin'` or `'spinPulse'` or `'spinReverse'` or `'pulse'` or `'beat'` or `'fade'` or `'beatFade'` or `'bounce'` or `'shake'`
-- sound?: `table` `{object}`
+- sound?: `{ bank?: string, set: string, name: string }` | `string`
+> - If string, it's supposed to be the file name that can be found in `web/build/sounds/`. It has to be a .mp3 file. You do not have to put .mp3, only the file name!
 
 > - bank?: ``string``
 
@@ -38,6 +39,9 @@ import Image from 'next/image'
 
 > - name: `string`
 
+- volume?: number
+> - Default: `0.1`
+
 ## Example
 
 ### ox_lib example
@@ -48,6 +52,15 @@ import Image from 'next/image'
         description = 'Profile updated **successfully**',
         duration = 3000,
         position = 'top-center',
+        type = 'success'
+    })
+
+    lib.notify({
+        description = 'Custm Sounds',
+        duration = 3000,
+        position = 'top-center',
+        sound = "beep", -- beep.mp3 should be in web/build/sounds
+        volume = 1.0,
         type = 'success'
     })
 
@@ -71,6 +84,13 @@ import Image from 'next/image'
 
     lib.notify({
         description = 'This is a custom notification.',
+        duration = 3000,
+        title = 'Custom',
+        icon = 'hamburger'
+    })
+
+     lib.notify({
+        description = 'This is a custom notification. \nLine-break support.\n ~r~Red color support\n ~g~Green color support\n ~b~Blue color support\n ~y~Yellow color support\n ~p~Purple color support\n ~o~Orange color support\n ~k~Black color support\n ~w~White color support\n ~s~Resets to default color.',
         duration = 3000,
         title = 'Custom',
         icon = 'hamburger'
