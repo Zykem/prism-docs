@@ -1,0 +1,106 @@
+import { Callout } from 'nextra/components'
+
+# Installation
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>Basic installation instructions for prism_mining</div>
+
+<Callout type="error">
+  **WARNING** : Resource must be named ``prism_mining`` to operate properly.
+</Callout>
+
+## Features
+
+Prism Mining is a comprehensive mining job resource with a full interactive UI, progression systems, and multiple minigames.
+
+- **Solo Quick Jobs** — Accept quick jobs to mine rocks and deliver ore for pay and XP
+- **Multiplayer Group Sessions** — Mine together with up to 4 players in shared sessions
+- **Mining Minigame** — Power-strike meter with moving green zone for breaking rocks
+- **Washing Minigame** — Wash raw rocks to extract ores and gems
+- **Smelting Minigame** — Control furnace temperature to smelt ores into ingots
+- **Gem Cutting Minigame** — QTE sequence to cut raw gems into valuable fragments
+- **XP and Leveling** — Level up to 500 with a formula-based XP curve
+- **Skill Tree** — Spend skill points on mining speed, yield, ore chance, smelting speed, gem quality, and rare finds
+- **Reputation Tiers** — Progress through Bronze, Silver, Gold, Platinum, and Diamond
+- **Vehicle Shop** — Purchase and sell mining vehicles (pickups, trucks)
+- **Tool Shop** — Upgrade from a basic pickaxe to iron, steel, and a mining drill
+- **Sell Shop** — Sell processed ingots and gem fragments for profit
+- **Daily and Weekly Quests** — Rotating quest objectives with milestone rewards
+- **Leaderboard** — Compete with other miners using Discord or Steam profile avatars
+- **Processing Stations** — Washing, smelting, and gem cutting stations placed around the map
+- **Full Dashboard UI** — Manage jobs, skills, tools, vehicles, quests, and stats from one interface
+- **3D Positional Audio** — Immersive mining, drilling, and smelting sounds
+- **Multi-Framework Support** — Works with QBCore, Qbox, and ESX
+
+## Dependencies
+
+The following resources must be installed and started before `prism_mining`:
+
+- [ox_lib](https://github.com/overextended/ox_lib/releases)
+- [oxmysql](https://github.com/overextended/oxmysql/releases)
+
+## Supported Frameworks
+
+Set your framework in `shared/config.lua` via `Config.Framework`:
+
+| Value | Framework |
+| ----- | --------- |
+| `'qb'` | QBCore |
+| `'qbx'` | Qbox |
+| `'esx'` | ESX |
+
+## Supported Interaction Systems
+
+Set your interaction type in `shared/config.lua` via `Config.InteractionType`:
+
+| Value | System |
+| ----- | ------ |
+| `'ox_target'` | ox_target |
+| `'qb-target'` | qb-target |
+| `'textui'` | TextUI prompt |
+| `'3dtext'` | 3D floating text |
+
+## Supported Fuel Systems
+
+Set via `Config.FuelSystem`:
+
+LegacyFuel, ps-fuel, lj-fuel, ox_fuel, cdn-fuel, hyon_gas_station, okokGasStation, nd_fuel, myFuel, ti_fuel, Renewed-Fuel, rcore_fuel, lc_fuel
+
+## Supported Vehicle Keys Systems
+
+Set via `Config.VehicleKeys`:
+
+qb-vehiclekeys, jaksam-vehicles-keys, mk_vehiclekeys, qs-vehiclekeys, wasabi_carlock, cd_garage, okokGarage, t1ger_keys, MrNewbVehicleKeys, Renewed, tgiann-hotwire, qbx_vehiclekeys, qs-advancedgarages
+
+## Asset Download
+
+<Callout type="info">
+  To find the asset, you must have made the purchase using your own keymaster account. Otherwise, you can use the transfer system to move the asset to a different keymaster account.
+</Callout>
+
+<div className='text-lg mt-5'>
+    Once the purchase is made on our official website, you will receive your asset directly in your [cfx portal](https://portal.cfx.re/) in your own panel you can download the asset and install it following the following documentation.
+</div>
+
+## Installation Steps
+
+1. **Ensure all dependencies are installed** — [ox_lib](https://github.com/overextended/ox_lib/releases) and [oxmysql](https://github.com/overextended/oxmysql/releases)
+2. **Edit configuration as desired** (Optional) — See the [Config](/mining/config) page for full details
+3. **Drag-and-drop our script** — Place `prism_mining` into your `resources` directory and add `ensure prism_mining` to your `server.cfg` after all dependencies
+4. **Restart your server**
+
+## Editable Files
+
+<Callout type="info">
+  This resource uses FiveM Asset Escrow. The following files are **not** obfuscated and can be freely edited:
+</Callout>
+
+| File | Description |
+| ---- | ----------- |
+| `shared/config.lua` | Main configuration — framework, zones, tools, vehicles, recipes, quests, and more |
+| `shared/locale.lua` | All translatable strings and messages |
+| `shared/theme.lua` | UI color theming |
+| `client/cl_customize.lua` | Client-side framework bridges — notifications, targets, fuel, vehicle keys |
+| `server/sv_customize.lua` | Server-side framework bridges — money, items, identifiers, player data |

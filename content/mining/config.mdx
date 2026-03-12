@@ -1,0 +1,421 @@
+import { Callout } from 'nextra/components'
+
+# Config
+
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>All Prism Scripts contain various editable and unobscured files containing, exports, client<br/> and server functions, configuration methods and more.</div>
+
+<Callout type="info">
+  The config file is located at ``shared/config.lua``. All values shown below are defaults — adjust them to suit your server.
+</Callout>
+
+## General Settings
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `Config.Debug` | boolean | `false` | Enable debug prints to the console |
+| `Config.Framework` | string | `'qbx'` | Framework to use: `'qb'`, `'qbx'`, or `'esx'` |
+| `Config.InteractionType` | string | `'ox_target'` | Interaction system: `'ox_target'`, `'qb-target'`, `'textui'`, or `'3dtext'` |
+| `Config.InteractionDistance` | number | `2.5` | Distance at which interactions become available |
+| `Config.InteractionKey` | number | `38` | Key code for textui/3dtext interactions (38 = E) |
+| `Config.ProfileType` | string | `'discord'` | Avatar source for leaderboard: `'discord'` or `'steam'` |
+| `Config.RequiredJob` | string/boolean | `false` | Set to a job name string to restrict mining, or `false` for no restriction |
+| `Config.CurrencySymbol` | string | `'$'` | Currency symbol shown in the UI |
+| `Config.SellShopEnabled` | boolean | `true` | Enable or disable the sell shop |
+| `Config.DefaultTool` | string | `'basic_pickaxe'` | Tool given to new miners by default |
+| `Config.PayoutAccount` | string | `'bank'` | Account for payouts: `'bank'` or `'cash'` |
+
+## External Systems
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `Config.FuelSystem` | string | `'ox_fuel'` | Fuel resource used for mining vehicles |
+| `Config.VehicleKeys` | string | `'qb-vehiclekeys'` | Vehicle keys resource |
+
+## Vehicle Selling
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `Config.SellVehicle.enabled` | boolean | `true` | Allow players to sell vehicles back |
+| `Config.SellVehicle.sellValue` | number | `0.7` | Sell-back ratio (0.7 = 70% of purchase price) |
+
+## Leveling and Progression
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `Config.MaxLevel` | number | `500` | Maximum mining level |
+| `Config.SkillPointInterval` | number | `5` | Levels between each skill point reward |
+| `Config.XPFormula` | function | `100 + (level * 50)` | XP required per level — takes level as input |
+
+### Reputation Tiers
+
+| Tier | Minimum Level |
+| ---- | ------------- |
+| Bronze | 1 |
+| Silver | 15 |
+| Gold | 35 |
+| Platinum | 60 |
+| Diamond | 100 |
+
+## Sell Prices
+
+Prices for processed items sold at the sell shop:
+
+| Item | Price |
+| ---- | ----- |
+| `iron_ingot` | $150 |
+| `copper_ingot` | $250 |
+| `gold_ingot` | $500 |
+| `ruby_fragment` | $400 |
+| `emerald_fragment` | $600 |
+| `diamond_fragment` | $1200 |
+
+## Payout Bonuses
+
+| Option | Default | Description |
+| ------ | ------- | ----------- |
+| `levelBonusPerLevel` | `0.005` | Bonus percentage added per player level |
+| `levelBonusMax` | `0.50` | Maximum level bonus cap (50%) |
+
+## Skills
+
+Players earn skill points every `Config.SkillPointInterval` levels and can invest them into the following skills:
+
+| ID | Name | Max Level | Cost | Bonus per Level | Type |
+| -- | ---- | --------- | ---- | --------------- | ---- |
+| `mining_speed` | Mining Speed | 10 | 1 | +5% | `mining_speed` |
+| `rock_yield` | Rock Yield | 10 | 1 | +3% | `mining_yield` |
+| `ore_chance` | Ore Chance | 10 | 2 | +4% | `washing_chance` |
+| `smelting_speed` | Smelting Speed | 10 | 2 | +5% | `smelting_speed` |
+| `gem_quality` | Gem Cut Quality | 10 | 3 | +3% | `gem_yield` |
+| `rare_find` | Rare Find | 10 | 3 | +2% | `rare_chance` |
+
+## Minigame Settings
+
+### Mining Minigame
+
+| Option | Default | Description |
+| ------ | ------- | ----------- |
+| `progressGain` | `15` | Progress gained per successful hit |
+| `progressSlip` | `8` | Progress lost on a miss |
+| `basePeriod` | `1200` | Base oscillation period (ms) |
+| `fastPeriod` | `900` | Fast oscillation period (ms) |
+| `greenZoneStartWidth` | `30` | Starting width of the green zone |
+| `greenZoneEndWidth` | `18` | Final width of the green zone (gets harder) |
+| `completionDelay` | `800` | Delay after completion (ms) |
+
+### Washing Minigame
+
+| Option | Default | Description |
+| ------ | ------- | ----------- |
+| `duration` | `3000` | Duration of washing minigame (ms) |
+
+### Smelting Minigame
+
+| Option | Default | Description |
+| ------ | ------- | ----------- |
+| `duration` | `8000` | Total smelting duration (ms) |
+| `heatDecayRate` | `15` | Rate at which heat decreases |
+| `heatPumpAmount` | `18` | Heat added per pump action |
+| `optimalZoneMin` | `55` | Lower bound of optimal temperature zone |
+| `optimalZoneMax` | `80` | Upper bound of optimal temperature zone |
+| `burnEnabled` | `true` | Whether burn events can occur |
+| `burnChance` | `15` | Chance of a burn event (percentage) |
+| `burnDuration` | `1000` | Duration of burn penalty (ms) |
+
+### Gem Cutting Minigame
+
+| Option | Default | Description |
+| ------ | ------- | ----------- |
+| `facetsRequired` | `5` | Number of facets to complete |
+| `sequenceLength` | `4` | Length of the QTE key sequence |
+| `timeLimit` | `2500` | Time limit per sequence (ms) |
+| `facetProgressBonus` | `20` | Progress bonus per successful facet |
+| `missPenalty` | `5` | Progress penalty per miss |
+
+## Session Settings
+
+| Option | Default | Description |
+| ------ | ------- | ----------- |
+| `travelDistance` | `100.0` | Distance threshold for travel phase |
+| `mineCompletionAuto` | `true` | Auto-complete mining when all rocks are mined |
+| `sessionTimeout` | `1800` | Session timeout in seconds (30 minutes) |
+| `heartbeatInterval` | `30` | Heartbeat check interval in seconds |
+| `leaderAdvanceOnly` | `true` | Only the session leader can advance phases |
+| `rockSeedOffset` | `1000` | Seed offset for rock placement randomization |
+
+## Quick Jobs
+
+| Option | Default | Description |
+| ------ | ------- | ----------- |
+| `Config.QuickJobsDisplayCount` | `3` | Number of quick jobs shown at once |
+| `Config.QuickJobsCooldownRefresh` | `10` | Cooldown refresh interval in seconds |
+
+## Quests
+
+| Option | Default | Description |
+| ------ | ------- | ----------- |
+| `Config.DailyQuestCount` | `3` | Number of daily quests available |
+| `Config.WeeklyQuestCount` | `2` | Number of weekly quests available |
+
+## Full Config Reference
+
+<Callout type="warning">
+  Below is the complete ``config.lua`` for reference. Sections like ``Config.WashingStations``, ``Config.WashingRecipes``, ``Config.SmeltingStations``, ``Config.SmeltingRecipes``, ``Config.GemCuttingStations``, ``Config.GemCuttingRecipes``, and ``Config.Quests`` are abbreviated — see your config file for the full station coordinates, recipes, and quest definitions.
+</Callout>
+
+```lua filename="config.lua" copy
+Config = {}
+
+Config.Debug = false
+Config.Framework = 'qbx'                    -- 'qb' | 'qbx' | 'esx'
+Config.InteractionType = 'ox_target'        -- 'ox_target' | 'qb-target' | 'textui' | '3dtext'
+Config.InteractionDistance = 2.5
+Config.InteractionKey = 38                  -- 38 = E key (for textui/3dtext)
+Config.ProfileType = 'discord'              -- 'discord' | 'steam'
+Config.RequiredJob = false                  -- false | 'jobName'
+Config.CurrencySymbol = '$'
+Config.SellShopEnabled = true
+Config.DefaultTool = 'basic_pickaxe'
+Config.PayoutAccount = 'bank'               -- 'bank' | 'cash'
+
+Config.FuelSystem = 'ox_fuel'
+Config.VehicleKeys = 'qb-vehiclekeys'
+
+Config.SellVehicle = {
+    enabled = true,
+    sellValue = 0.7,                        -- 70% of purchase price
+}
+
+Config.XPFormula = function(level)
+    return 100 + (level * 50)
+end
+
+Config.MaxLevel = 500
+Config.SkillPointInterval = 5
+
+Config.ReputationTiers = {
+    { name = 'bronze',   minLevel = 1 },
+    { name = 'silver',   minLevel = 15 },
+    { name = 'gold',     minLevel = 35 },
+    { name = 'platinum', minLevel = 60 },
+    { name = 'diamond',  minLevel = 100 },
+}
+
+Config.SellPrices = {
+    iron_ingot       = 150,
+    copper_ingot     = 250,
+    gold_ingot       = 500,
+    ruby_fragment    = 400,
+    emerald_fragment = 600,
+    diamond_fragment = 1200,
+}
+
+Config.PayoutBonuses = {
+    levelBonusPerLevel = 0.005,
+    levelBonusMax = 0.50,
+}
+
+Config.GarageMarker = {
+    marker = 39,
+    color = { r = 190, g = 238, b = 17, a = 150 },
+}
+
+Config.DepotLocations = {
+    {
+        coords = vector4(2569.3008, 2720.4292, 42.9645, 216.4872),
+        npcModel = 's_m_y_construct_01',
+        npcScenario = 'WORLD_HUMAN_CLIPBOARD',
+        label = 'Mining Foreman',
+        spawnPoints = {
+            vec4(2581.8545, 2729.2666, 42.6987, 181.0052),
+            vec4(2582.7373, 2714.5637, 42.6611, 293.6299),
+        },
+        blip = { sprite = 618, color = 2, scale = 0.8, label = 'Mining Depot' },
+    },
+}
+
+Config.Vehicles = {
+    {
+        model = 'bison', label = 'Bison', type = 'Pickup',
+        price = 50000, capacity = 1, minReputation = 'bronze',
+        engineLabel = '6.0L V8', gearLabel = '5 Speed', hpLabel = '300 HP',
+        image = 'bison.png',
+    },
+    {
+        model = 'rubble', label = 'Rubble', type = 'Truck',
+        price = 80000, capacity = 2, minReputation = 'bronze',
+        engineLabel = '7.0L V8', gearLabel = '6 Speed', hpLabel = '350 HP',
+        image = 'rubble.png',
+    },
+    {
+        model = 'tiptruck', label = 'Tipper', type = 'Truck',
+        price = 80000, capacity = 2, minReputation = 'bronze',
+        engineLabel = '7.0L V8', gearLabel = '6 Speed', hpLabel = '350 HP',
+        image = 'tiptruck.png',
+    },
+}
+
+Config.Tools = {
+    {
+        id = 'basic_pickaxe', name = 'Basic Pickaxe', type = 'Starter',
+        price = 0, levelRequired = 1,
+        stats = { speed = 1.0, yield = 1.0, durability = 1.0 },
+        image = 'nui://ox_inventory/web/images/stone_pickaxe.png',
+        prop = 'prism_stone_pickaxe', sound = 'pickaxe',
+        animation = { dict = 'melee@large_wpn@streamed_core', clip = 'ground_attack_on_spot_body' },
+        bone = 57005,
+        offset = { x = 0.149, y = 0.188, z = 0.024, rx = -73.0, ry = -8.5, rz = -13.0 },
+    },
+    {
+        id = 'iron_pickaxe', name = 'Iron Pickaxe', type = 'Upgrade',
+        price = 2500, levelRequired = 5,
+        stats = { speed = 1.3, yield = 1.2, durability = 1.4 },
+        image = 'nui://ox_inventory/web/images/iron_pickaxe.png',
+        prop = 'prism_iron_pickaxe', sound = 'pickaxe',
+        animation = { dict = 'melee@large_wpn@streamed_core', clip = 'ground_attack_on_spot_body' },
+        bone = 57005,
+        offset = { x = 0.149, y = 0.188, z = 0.024, rx = -73.0, ry = -8.5, rz = -13.0 },
+    },
+    {
+        id = 'steel_pickaxe', name = 'Steel Pickaxe', type = 'Upgrade',
+        price = 7500, levelRequired = 10,
+        stats = { speed = 1.5, yield = 1.4, durability = 1.6 },
+        image = 'nui://ox_inventory/web/images/steel_pickaxe.png',
+        prop = 'prism_steel_pickaxe', sound = 'pickaxe',
+        animation = { dict = 'melee@large_wpn@streamed_core', clip = 'ground_attack_on_spot_body' },
+        bone = 57005,
+        offset = { x = 0.149, y = 0.188, z = 0.024, rx = -73.0, ry = -8.5, rz = -13.0 },
+    },
+    {
+        id = 'mining_drill', name = 'Mining Drill', type = 'Advanced',
+        price = 15000, levelRequired = 20,
+        stats = { speed = 2.0, yield = 1.8, durability = 2.0 },
+        image = 'nui://ox_inventory/web/images/mining_drill.png',
+        prop = 'prism_mining_drill', sound = 'drill',
+        animation = { dict = 'anim@heists@fleeca_bank@drilling', clip = 'drill_right' },
+        bone = 57005,
+        offset = { x = 0.435, y = -0.400, z = -0.090, rx = -82.5, ry = 53.5, rz = 37.5 },
+    },
+}
+
+Config.Sounds = {
+    pickaxe  = { file = 'pickaxe.ogg',  volume = 0.8, delay = 1000, refDistance = 3,  maxDistance = 25, rolloffFactor = 1 },
+    drill    = { file = 'drill.ogg',    volume = 0.7, delay = 0,    refDistance = 5,  maxDistance = 35, rolloffFactor = 1 },
+    smelting     = { file = 'smelting.mp3',     volume = 0.6, delay = 0,    refDistance = 3,  maxDistance = 20, rolloffFactor = 1 },
+    lasercutter  = { file = 'lasercutter.mp3', volume = 0.6, delay = 0,    refDistance = 3,  maxDistance = 20, rolloffFactor = 1 },
+}
+
+Config.Skills = {
+    { id = 'mining_speed',   name = 'Mining Speed',     description = 'Increase mining speed',        maxLevel = 10, cost = 1, bonusPerLevel = 0.05, type = 'mining_speed',   bonus = '+5% per level' },
+    { id = 'rock_yield',     name = 'Rock Yield',       description = 'More resources per rock',      maxLevel = 10, cost = 1, bonusPerLevel = 0.03, type = 'mining_yield',   bonus = '+3% per level' },
+    { id = 'ore_chance',     name = 'Ore Chance',       description = 'Higher chance of finding ore',  maxLevel = 10, cost = 2, bonusPerLevel = 0.04, type = 'washing_chance', bonus = '+4% per level' },
+    { id = 'smelting_speed', name = 'Smelting Speed',   description = 'Faster ore smelting',          maxLevel = 10, cost = 2, bonusPerLevel = 0.05, type = 'smelting_speed', bonus = '+5% per level' },
+    { id = 'gem_quality',    name = 'Gem Cut Quality',  description = 'Better quality gem cuts',      maxLevel = 10, cost = 3, bonusPerLevel = 0.03, type = 'gem_yield',      bonus = '+3% per level' },
+    { id = 'rare_find',      name = 'Rare Find',        description = 'Chance to find rare gems',     maxLevel = 10, cost = 3, bonusPerLevel = 0.02, type = 'rare_chance',    bonus = '+2% per level' },
+}
+
+Config.QuickJobs = {
+    {
+        id = 'iron_run', label = 'Iron Run',
+        description = 'Mine iron deposits at the North Quarry.',
+        coords = vector3(2964.87, 2756.52, 43.39),
+        radius = 100.0,
+        rockModels = { 'prism_ironore_main', 'prism_copperore_main' },
+        rockCount = 8,
+        oreTypes = { 'Iron', 'Copper' },
+        tags = { 'beginner', 'iron' },
+        minReputation = 'bronze',
+        minLevel = 1,
+        basePay = 500,
+        baseXP = 100,
+        cooldown = 300,
+        image = 'rubble.png',
+        vehicle = 'rubble',
+        dropoff = vector4(2430.9106, 4971.3848, 45.9270, 44.7611),
+    },
+    -- Add more quick jobs here (gold_run, ruby_run, emerald_run, etc.)
+}
+
+Config.QuickJobsDisplayCount = 3
+Config.QuickJobsCooldownRefresh = 10
+
+Config.MiningZones = {
+    {
+        id = 'quarry_north', name = 'North Quarry',
+        description = 'A beginner-friendly quarry with basic ore deposits.',
+        coords = vector3(2964.87, 2756.52, 43.39),
+        radius = 100.0,
+        difficulty = 'easy',
+        minLevel = 1,
+        minReputation = 'bronze',
+        rockCount = 15,
+        respawnTime = 120,
+        rockModels = { 'prism_rock_node_a', 'prism_rock_node_b', 'prism_rock_node_c' },
+        rewards = {
+            { item = 'rock', min = 2, max = 5, chance = 100 },
+            { item = 'coal', min = 1, max = 2, chance = 30 },
+        },
+        rareDrops = {
+            { item = 'raw_ruby', chance = 5 },
+            { item = 'raw_emerald', chance = 3 },
+            { item = 'raw_diamond', chance = 1 },
+        },
+        payout = 0,
+        xp = 25,
+        minPlayers = 1,
+        maxPlayers = 4,
+        oreTypes = { 'Iron', 'Copper', 'Gold' },
+        vehicle = 'flatbed',
+    },
+    -- Add more mining zones here
+}
+
+Config.MiningMinigame = {
+    progressGain = 15, progressSlip = 8,
+    basePeriod = 1200, fastPeriod = 900,
+    greenZoneStartWidth = 30, greenZoneEndWidth = 18,
+    completionDelay = 800,
+}
+
+Config.WashingMinigame = { duration = 3000 }
+
+Config.SmeltingMinigame = {
+    duration = 8000, heatDecayRate = 15, heatPumpAmount = 18,
+    optimalZoneMin = 55, optimalZoneMax = 80,
+    burnEnabled = true, burnChance = 15, burnDuration = 1000,
+}
+
+Config.GemCuttingMinigame = {
+    facetsRequired = 5, sequenceLength = 4, timeLimit = 2500,
+    facetProgressBonus = 20, missPenalty = 5,
+}
+
+Config.SessionSettings = {
+    travelDistance = 100.0,
+    mineCompletionAuto = true,
+    sessionTimeout = 1800,
+    heartbeatInterval = 30,
+    leaderAdvanceOnly = true,
+    rockSeedOffset = 1000,
+}
+
+Config.WashingStations = { ... }  -- Washing stations with coords, props, blips
+Config.WashingRecipes = { ... }   -- Input rocks to output ores/gems
+Config.SmeltingStations = { ... } -- Smelting furnaces with coords, props
+Config.SmeltingRecipes = { ... }  -- Ore to ingots
+Config.GemCuttingStations = { ... } -- Gem cutting tables
+Config.GemCuttingRecipes = { ... }  -- Raw gems to fragments
+
+Config.Quests = {
+    daily = { ... },
+    weekly = { ... },
+    milestones = { ... },
+}
+
+Config.DailyQuestCount = 3
+Config.WeeklyQuestCount = 2
+```
