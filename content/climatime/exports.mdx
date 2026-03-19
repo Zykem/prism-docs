@@ -1,0 +1,272 @@
+import { Callout } from 'nextra/components'
+
+# Exports and Integrations
+
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>Climatime provides a full set of server and client exports for cross-resource integration. It is a drop-in replacement for qb-weathersync.</div>
+
+## Server Exports
+
+### Weather
+
+#### getWeatherState
+Returns the current weather type.
+
+```lua copy
+local weather = exports['prim_climatime']:getWeatherState()
+-- Returns: 'CLEAR', 'RAIN', 'SNOW', etc.
+```
+
+#### setWeather
+Sets the weather and broadcasts to all clients.
+
+```lua copy
+local success = exports['prim_climatime']:setWeather('RAIN')
+-- Returns: true on success, false if invalid weather type
+```
+
+> Valid weather types: `EXTRASUNNY`, `CLEAR`, `CLEARING`, `CLOUDS`, `OVERCAST`, `SMOG`, `FOGGY`, `RAIN`, `THUNDER`, `SNOW`, `BLIZZARD`, `SNOWLIGHT`, `XMAS`, `HALLOWEEN`
+
+#### getFullWeatherState
+Returns the complete weather state table.
+
+```lua copy
+local state = exports['prim_climatime']:getFullWeatherState()
+--[[
+Returns: {
+    currentWeather    = 'CLEAR',
+    freezeWeather     = false,
+    instantChange     = false,
+    enableBlackout    = false,
+    forceSnowOnGround = false,
+}
+]]
+```
+
+#### getFreezeWeather
+Returns whether weather cycling is frozen.
+
+```lua copy
+local frozen = exports['prim_climatime']:getFreezeWeather()
+-- Returns: true/false
+```
+
+#### setFreezeWeather
+Toggles weather freeze on/off.
+
+```lua copy
+exports['prim_climatime']:setFreezeWeather(true)  -- freeze
+exports['prim_climatime']:setFreezeWeather(false) -- unfreeze
+```
+
+### Blackout
+
+#### getBlackoutState
+Returns whether blackout mode is active.
+
+```lua copy
+local blackout = exports['prim_climatime']:getBlackoutState()
+-- Returns: true/false
+```
+
+#### setBlackout
+Toggles blackout mode (kills artificial lights).
+
+```lua copy
+exports['prim_climatime']:setBlackout(true)  -- enable blackout
+exports['prim_climatime']:setBlackout(false) -- disable blackout
+```
+
+### Snow
+
+#### getSnowState
+Returns whether ground snow is active.
+
+```lua copy
+local snow = exports['prim_climatime']:getSnowState()
+-- Returns: true/false
+```
+
+#### setSnow
+Toggles ground snow effects (footsteps, vehicle trails, ice audio).
+
+```lua copy
+exports['prim_climatime']:setSnow(true)  -- enable snow
+exports['prim_climatime']:setSnow(false) -- disable snow
+```
+
+### Time
+
+#### getTime
+Returns the current server time.
+
+```lua copy
+local time = exports['prim_climatime']:getTime()
+--[[
+Returns: {
+    hour   = 14,
+    minute = 30,
+    frozen = false,
+}
+]]
+```
+
+#### setTime
+Sets the server time. Triggers a smooth transition on all clients.
+
+```lua copy
+exports['prim_climatime']:setTime(6, 0)   -- 6:00 AM
+exports['prim_climatime']:setTime(22, 30) -- 10:30 PM
+```
+
+#### getTimeFreezeState
+Returns whether time is frozen.
+
+```lua copy
+local frozen = exports['prim_climatime']:getTimeFreezeState()
+-- Returns: true/false
+```
+
+#### setTimeFreeze
+Toggles time freeze on/off.
+
+```lua copy
+exports['prim_climatime']:setTimeFreeze(true)  -- freeze
+exports['prim_climatime']:setTimeFreeze(false) -- unfreeze
+```
+
+### Schedule
+
+#### getScheduleState
+Returns whether the weather schedule cycle is active.
+
+```lua copy
+local active = exports['prim_climatime']:getScheduleState()
+-- Returns: true/false
+```
+
+#### setScheduleActive
+Starts or stops the weather schedule cycle.
+
+```lua copy
+exports['prim_climatime']:setScheduleActive(true)  -- start cycling
+exports['prim_climatime']:setScheduleActive(false) -- stop cycling
+```
+
+---
+
+## Client Exports
+
+### Sync Control (Housing / Interiors)
+
+<Callout type="info">
+  Use these exports when players enter housing shells or interiors where you want custom weather and time.
+  While paused, server updates are still received but **not applied** — so when sync resumes, the latest server state is applied instantly.
+</Callout>
+
+#### PauseSync
+Pauses all weather and time sync from the server.
+
+```lua copy
+-- Enter interior with default weather (just stops updates)
+exports['prim_climatime']:PauseSync()
+
+-- Enter interior with specific weather
+exports['prim_climatime']:PauseSync('EXTRASUNNY')
+```
+
+#### ResumeSync
+Resumes weather and time sync. Re-applies the latest server state instantly.
+
+```lua copy
+exports['prim_climatime']:ResumeSync()
+```
+
+#### IsSyncPaused
+Returns whether sync is currently paused.
+
+```lua copy
+local paused = exports['prim_climatime']:IsSyncPaused()
+-- Returns: true/false
+```
+
+### Read State
+
+#### GetCurrentWeather
+Returns the weather type currently active on this client.
+
+```lua copy
+local weather = exports['prim_climatime']:GetCurrentWeather()
+-- Returns: 'CLEAR', 'RAIN', etc.
+```
+
+#### GetCurrentTime
+Returns the time currently displayed on this client.
+
+```lua copy
+local time = exports['prim_climatime']:GetCurrentTime()
+--[[
+Returns: {
+    hour   = 14,
+    minute = 30,
+}
+]]
+```
+
+---
+
+## qb-weathersync Compatibility
+
+<Callout type="info">
+  Climatime registers ``provide 'qb-weathersync'`` in its manifest. Any script calling ``exports['qb-weathersync']`` will automatically route to Climatime — no changes needed in those scripts.
+</Callout>
+
+```lua copy
+-- All of these work automatically with Climatime installed:
+exports['qb-weathersync']:getWeatherState()
+exports['qb-weathersync']:setWeather('RAIN')
+exports['qb-weathersync']:getTime()
+exports['qb-weathersync']:setTime(12, 0)
+exports['qb-weathersync']:getBlackoutState()
+exports['qb-weathersync']:setBlackout(true)
+exports['qb-weathersync']:getTimeFreezeState()
+exports['qb-weathersync']:setTimeFreeze(true)
+```
+
+---
+
+## Usage Examples
+
+### Housing Script
+
+```lua copy
+-- player_enters_shell.lua (client-side)
+RegisterNetEvent('housing:enterShell', function()
+    exports['prim_climatime']:PauseSync('EXTRASUNNY')
+end)
+
+RegisterNetEvent('housing:exitShell', function()
+    exports['prim_climatime']:ResumeSync()
+end)
+```
+
+### Event Script
+
+```lua copy
+-- halloween_event.lua (server-side)
+RegisterCommand('starthalloween', function()
+    exports['prim_climatime']:setWeather('HALLOWEEN')
+    exports['prim_climatime']:setTime(22, 0)
+    exports['prim_climatime']:setBlackout(true)
+    exports['prim_climatime']:setTimeFreeze(true)
+end)
+
+RegisterCommand('stophalloween', function()
+    exports['prim_climatime']:setWeather('CLEAR')
+    exports['prim_climatime']:setBlackout(false)
+    exports['prim_climatime']:setTimeFreeze(false)
+end)
+```

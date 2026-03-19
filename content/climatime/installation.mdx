@@ -1,0 +1,46 @@
+import { Callout } from 'nextra/components'
+
+# Installation
+
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>Basic installation instructions for prim_climatime</div>
+
+<Callout type="error">
+  **WARNING** : Resource must be named ``prim_climatime`` to operate properly.
+</Callout>
+
+## Asset download
+
+<Callout type="info">
+  To find the asset, you must have made the purchase using your own keymaster account. Otherwise, you can use the transfer system to move the asset to a different keymaster account.
+</Callout>
+
+<div className='text-lg mt-5'>
+    Once the purchase is made on our official website, you will receive your asset directly in your [cfx portal](https://portal.cfx.re/) in your own panel you can download the asset and install it following the following documentation.
+</div>
+
+## Dependencies
+
+- **[ox_lib](https://github.com/overextended/ox_lib/releases)** — required
+- **[oxmysql](https://github.com/overextended/oxmysql/releases)** — required
+
+<Callout type="error">
+  **IMPORTANT** : You must **remove all other weather and time scripts** from your server before installing Climatime. Running multiple weather scripts will cause conflicts and unexpected behavior. Climatime is a full replacement.
+</Callout>
+
+## Installation
+
+- **Remove all existing weather/time scripts** : Delete or disable any other weather or time management resource from your server
+- **Ensure all dependencies are installed** : `ox_lib` and `oxmysql` must be started before `prim_climatime`
+- **Edit configuration as desired** (Optional) — see [Config](/climatime/config)
+- **Drag-and-drop our script** : Drag `prim_climatime` in to your `resources` directory and add `ensure prim_climatime` to your `server.cfg` after all dependencies
+- **Restart your server** — the database tables (`climatime_zones` and `climatime_schedules`) are created automatically on first start
+
+## Supported Frameworks
+
+Climatime supports **QBCore**, **QBX**, and **ESX** with automatic framework detection. No additional configuration is needed — the resource will detect your framework on startup.
+
+If no framework is detected, admin permissions fall back to ACE permissions (`command` principal).
