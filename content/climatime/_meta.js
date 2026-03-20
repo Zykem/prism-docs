@@ -17,4 +17,16 @@ export default {
             copyPage: false
         }
     },
+    seasonal: {
+        title: 'Seasonal Weather',
+        theme: {
+            copyPage: false
+        }
+    },
+    faq: {
+        title: 'FAQ',
+        theme: {
+            copyPage: false
+        }
+    },
 }

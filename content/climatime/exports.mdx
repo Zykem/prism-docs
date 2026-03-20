@@ -148,12 +148,92 @@ local active = exports['prim_climatime']:getScheduleState()
 -- Returns: true/false
 ```
 
+#### getScheduleType
+Returns the current schedule mode.
+
+```lua copy
+local schedType = exports['prim_climatime']:getScheduleType()
+-- Returns: 'hourly' or 'seasonal'
+```
+
 #### setScheduleActive
 Starts or stops the weather schedule cycle.
 
 ```lua copy
 exports['prim_climatime']:setScheduleActive(true)  -- start cycling
 exports['prim_climatime']:setScheduleActive(false) -- stop cycling
+```
+
+#### getSeasonalEntries
+Returns the seasonal weather entries matching the current month and their effective chances.
+
+```lua copy
+local entries, profileName = exports['prim_climatime']:getSeasonalEntries()
+--[[
+entries: {
+    { weather = 'SNOW', chance = 35, effectiveChance = 35, min_duration = 720, max_duration = 4320, ... },
+    { weather = 'FOGGY', chance = 15, effectiveChance = 45, ... },  -- boosted during active hours
+}
+profileName: 'Winter'
+]]
+```
+
+### Forecast
+
+#### getCurrentForecast
+Returns dynamic weather data with time-of-day temperature adjustments.
+
+```lua copy
+local forecast = exports['prim_climatime']:getCurrentForecast()
+--[[
+Returns: {
+    weather     = 'CLEAR',
+    temperature = 31,       -- Celsius, adjusted for time of day
+    feelsLike   = 30,
+    wind        = 5,        -- 0-100%
+    humidity    = 30,       -- 0-100%
+}
+]]
+```
+
+#### getWeatherForecast
+Returns forecast data for a specific weather type.
+
+```lua copy
+local forecast = exports['prim_climatime']:getWeatherForecast('RAIN')
+-- Returns: { weather = 'RAIN', temperature = 18, feelsLike = 15, wind = 30, humidity = 85 }
+```
+
+#### getTemperature
+Returns the current temperature in Celsius.
+
+```lua copy
+local temp = exports['prim_climatime']:getTemperature()
+-- Returns: 31 (varies with weather type and time of day)
+```
+
+#### getFeelsLike
+Returns the feels-like temperature.
+
+```lua copy
+local feelsLike = exports['prim_climatime']:getFeelsLike()
+-- Returns: 30
+```
+
+#### getHumidity
+Returns the current humidity percentage.
+
+```lua copy
+local humidity = exports['prim_climatime']:getHumidity()
+-- Returns: 30 (0-100)
+```
+
+#### getWindData
+Returns the current wind percentage.
+
+```lua copy
+local wind = exports['prim_climatime']:getWindData()
+-- Returns: 5 (0-100)
 ```
 
 ---
@@ -216,6 +296,48 @@ Returns: {
 ]]
 ```
 
+### Forecast (Client)
+
+#### GetCurrentForecast
+Returns dynamic weather data on this client.
+
+```lua copy
+local forecast = exports['prim_climatime']:GetCurrentForecast()
+--[[
+Returns: {
+    weather     = 'CLEAR',
+    temperature = 31,
+    feelsLike   = 30,
+    wind        = 5,
+    humidity    = 30,
+}
+]]
+```
+
+#### GetTemperature
+```lua copy
+local temp = exports['prim_climatime']:GetTemperature()
+-- Returns: 31
+```
+
+#### GetFeelsLike
+```lua copy
+local feelsLike = exports['prim_climatime']:GetFeelsLike()
+-- Returns: 30
+```
+
+#### GetHumidity
+```lua copy
+local humidity = exports['prim_climatime']:GetHumidity()
+-- Returns: 30
+```
+
+#### GetWindData
+```lua copy
+local wind = exports['prim_climatime']:GetWindData()
+-- Returns: 5
+```
+
 ---
 
 ## qb-weathersync Compatibility
@@ -250,6 +372,28 @@ end)
 
 RegisterNetEvent('housing:exitShell', function()
     exports['prim_climatime']:ResumeSync()
+end)
+```
+
+### Survival / Clothing Script
+
+```lua copy
+-- survival_check.lua (client-side)
+CreateThread(function()
+    while true do
+        local temp = exports['prim_climatime']:GetTemperature()
+        local humidity = exports['prim_climatime']:GetHumidity()
+
+        if temp < -5 then
+            -- Player is freezing — apply cold effects
+            TriggerEvent('survival:applyFreezing')
+        elseif temp > 35 and humidity > 70 then
+            -- Hot and humid — increase thirst rate
+            TriggerEvent('survival:increaseThirst')
+        end
+
+        Wait(30000) -- check every 30 seconds
+    end
 end)
 ```
 
