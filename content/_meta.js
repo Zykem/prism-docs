@@ -216,4 +216,13 @@ export default {
       collapsed: true
     },
   },
+  climatime: {
+    title: '🌦️ Prism Climatime',
+    theme: {
+      breadcrumb: false,
+      pagination: true,
+      copyPage: false,
+      collapsed: true
+    },
+  },
 }
