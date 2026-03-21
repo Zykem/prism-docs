@@ -105,8 +105,10 @@ Config.RateLimits = {
 --   false     = do nothing, zones continue to override
 Config.ClearZonesOnWeatherChange = 'disable'
 
--- Disable active schedule when manually changing weather?
-Config.DisableScheduleOnWeatherChange = true
+-- What happens to the active schedule when admin manually changes weather?
+--   'stop'      = schedule auto-deactivates, admin must re-enable (recommended)
+--   'temporary' = schedule stays active, next cycle tick picks new weather automatically
+Config.ScheduleOverrideBehavior = 'stop'
 
 -- Minimum radius for weather zones (in game units, ~meters)
 Config.MinZoneRadius = 200
