@@ -1,0 +1,89 @@
+import { Callout } from 'nextra/components'
+
+# Exports (Developer API)
+
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>This page is for developers who want to integrate `prism_deathscreen` into custom scripts.</div>
+
+## Client events
+
+### `prism_deathscreen:onDeath`
+
+Triggered when the local player enters the deathscreen (dies).
+
+```lua copy
+AddEventHandler('prism_deathscreen:onDeath', function(data)
+    -- data can be nil
+    -- data.weapon: string? (example: "WEAPON_PISTOL")
+end)
+```
+
+**Parameters**
+
+- `data` (`table | nil`)
+  - `weapon` (`string | nil`) — weapon hash name, e.g. `"WEAPON_PISTOL"`
+
+---
+
+### `prism_deathscreen:onSpawn`
+
+Triggered when the local player respawns / leaves the deathscreen.
+
+```lua copy
+AddEventHandler('prism_deathscreen:onSpawn', function()
+end)
+```
+
+## State bag
+
+### `prismDead` (configurable)
+
+When enabled via `Config.DeathStatebag`, the resource updates a player state bag on death/respawn.
+
+```lua copy
+local isDead = Player(serverId).state.prismDead
+```
+
+<Callout type="info">
+  You can disable or rename this in `shared/config.lua` via `Config.DeathStatebag`.
+</Callout>
+
+## Do I need exports?
+
+In most servers, **no**.
+
+- **Normal setup**: install `prism_deathscreen`, configure it, and (optionally) add the correct migration `shared_script` to your ambulance job (see the Installation page).
+- **Most integrations** are handled by the migration include, so you don’t have to call anything manually.
+
+## Migration include (recommended “API”)
+
+If you are integrating into an existing ambulance job, the recommended approach is to include the matching migration file in that job’s `fxmanifest.lua`.
+
+```lua filename="fxmanifest.lua" copy
+-- ESX
+shared_script "@prism_deathscreen/migration/esx_ambulancejob.lua"
+
+-- Wasabi
+shared_script "@prism_deathscreen/migration/wasabi_ambulance.lua"
+
+-- QB
+shared_script "@prism_deathscreen/migration/qb-ambulancejob.lua"
+
+-- QBX
+shared_script "@prism_deathscreen/migration/qbx_ambulancejob.lua"
+```
+
+<Callout type="info">
+  Only include **one** of these (the one that matches your ambulance job).
+</Callout>
+
+## Custom framework / custom ambulance job
+
+If you don’t use one of the supported ambulance jobs, you can still use `prism_deathscreen` as a standalone death UI.
+
+- Start the resource
+- Configure timers / respawn points in `shared/config.lua`
+- If you want deeper job-specific behavior, use the migration files as a reference for what needs to be hooked in your own job resource.

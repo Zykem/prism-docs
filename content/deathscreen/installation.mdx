@@ -1,0 +1,72 @@
+import { Callout } from 'nextra/components'
+
+# Installation
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>Basic installation instructions for prism_deathscreen</div>
+
+<Callout type="error">
+  **WARNING** : Resource must be named ``prism_deathscreen`` to operate properly.
+</Callout>
+
+## Asset download
+
+<Callout type="info">
+  To find the asset, you must have made the purchase using your own keymaster account. Otherwise, you can use the transfer system to move the asset to a different keymaster account.
+</Callout>
+
+<div className='text-lg mt-5'>
+    Once the purchase is made on our official website, you will receive your asset directly in your [cfx portal](https://portal.cfx.re/) in your own panel you can download the asset and install it following the following documentation.
+</div>
+
+## Installation
+
+- **Ensure all dependencies are installed**: [`ox_lib`](https://github.com/communityox/ox_lib/releases)
+- **Edit configuration as desired** (Optional) in `shared/config.lua`
+- **Drag-and-drop our script**: Drag `prism_deathscreen` into your `resources` directory
+- **Ensure the resource**: add `ensure prism_deathscreen` to your `server.cfg` (after `ox_lib`)
+- **Restart your server**
+
+## What this resource is (and isn't)
+
+- **Not a replacement**: `prism_deathscreen` does not replace your ambulance job. It works alongside it.
+- **Works with any ambulance job**: it can integrate with ESX/QBCore/QBX/Wasabi setups via a small migration include.
+
+## Integrate into your ambulance job (migration include)
+
+Add **one** line to your ambulance job's `fxmanifest.lua` (this allows the job resource to talk to `prism_deathscreen` cleanly).
+
+<Callout type="info">
+  Put the line under your other `shared_script` entries (or anywhere in `fxmanifest.lua` where `shared_script` is valid).
+</Callout>
+
+### `esx_ambulancejob`
+
+```lua filename="fxmanifest.lua" copy
+shared_script "@prism_deathscreen/migration/esx_ambulancejob.lua"
+```
+
+### `wasabi_ambulance`
+
+```lua filename="fxmanifest.lua" copy
+shared_script "@prism_deathscreen/migration/wasabi_ambulance.lua"
+```
+
+### `qb-ambulancejob`
+
+```lua filename="fxmanifest.lua" copy
+shared_script "@prism_deathscreen/migration/qb-ambulancejob.lua"
+```
+
+### `qbx_ambulancejob`
+
+```lua filename="fxmanifest.lua" copy
+shared_script "@prism_deathscreen/migration/qbx_ambulancejob.lua"
+```
+
+## Common issues
+
+- **“Could not find resource prism_deathscreen”**: the folder name must be `prism_deathscreen` and it must be started in `server.cfg`.
+- **Integration not working**: double-check the migration line is in the correct ambulance job resource (and that you picked the correct file for your framework).
