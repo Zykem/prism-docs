@@ -1,0 +1,172 @@
+# Config
+
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>All Prism Scripts contain various editable and unobscured files containing, exports, client<br/> and server functions, configuration methods and more.</div>
+
+```lua filename="config.lua" copy
+local Config = {}
+
+-- Locale for UI and messages: "en", "pl", etc. Must match a file in locales/*.lua
+-- Available Locales: en, de, es, pl, fr, pl, pt-br, pt
+Config.Locale = "en"
+
+Config.Debug = true
+
+Config.PrimaryColor = "#BEEE11"
+
+-- The maximum time in seconds a damage persists.
+-- Example: you get punched by an NPC, 6 seconds later you die (for whatever reason), the damage will not be marked in the UI because you set this value to 5.
+Config.MaxDamageTime = 10
+
+-- if `enabled`, it will update the `name` player state bag on death/respawn.
+Config.DeathStatebag = {
+    enabled = true,
+    name = "prismDead"
+}
+
+-- set to false if you have scripts that handle death animations for you
+-- for example esx_ambulancejob, wasabi_ambulance, etc...
+Config.UsePrismDeathSystem = true
+
+-- interval in seconds to refresh dispatch distance for every dead player
+-- note: too low values may cause performance issues in higher-player servers (+500)
+Config.DistanceRefreshInterval = 5
+
+-- Time before optional respawn
+Config.TimerDuration = 60
+
+-- Time before it forces respawn
+Config.BleedoutTimer = 120
+
+-- Important only if you have wasabi_ambulance
+-- After respawning, do you want to be spawned and checked in the same way wasabi does it?
+-- If false, it will use our system
+-- You can keep this true if you don't have wasabis ambulance job, dont worry.
+Config.UseWasabiRecoverySystem = true
+
+-- Enable users to select the hospital they want to spawn in? (Check Config.RespawnCoords)
+-- If false, it will automatically select the first element of RespawnCoords
+-- Will NOT work with wasabi_ambulance & Config.UseWasabiRecoverySystem
+Config.EnableHospitalChoice = true
+
+-- respawn the player at nearest hospital?
+-- (this applies if EnableHospitalChoice is false or if player bleeds out)
+Config.RespawnAtNearestHospital = true
+
+Config.DeathSettings = {
+    disablePauseMenu = true, -- set to true if you want us to disable pause menu on death
+    hideRadar = true,        -- hide minimap during death?
+    DisableControls = {
+        enabled = true,      -- set to false if you dont want us to disable controls during death
+        keys = {
+            245,             -- T (Chat)
+        },
+    }
+}
+
+-- an additional function that will be called while player is dead. you can add your own stuff in here
+-- this function will be called every 100ms
+Config.deadLoopFunciton = function()
+    local ped = cache.ped
+
+    -- making sure player has "godmode" when dead
+    SetEntityInvincible(ped, true)
+    SetEntityCanBeDamaged(ped, false)
+end
+
+-- list of locations player can choose from after clicking "Respawn" in the UI
+Config.RespawnCoords = {
+    { name = "Hospital Los Santos", coords = vector4(-71.5070, -1508.3101, 33.4361, 225.2589) }
+}
+
+Config.SyncCooldown = 5 -- in seconds
+Config.DispatchCooldown = 60 * 5 -- in seconds ( 5 minutes )
+
+Config.DeathAnimation = {
+    enabled = true, -- if enabled, it will still wait for user to stop, so the death looks natural (it wont sync player instantly)
+    dict = {
+        vehicle = "veh@low@front_ps@idle_duck",
+        normal = "combat@damage@writhe"
+    },
+    clip = {
+        vehicle = "sit",
+        normal = "writhe_loop"
+    }
+}
+
+-- if no weapon has been detected, it uses this as the weapon image.
+Config.FallbackWeaponImg = "https://r2.fivemanage.com/myip9JtGBS02f6UfP1WKm/Fist-icon.webp"
+
+return Config
+
+```
+
+## What each setting does
+
+### General
+
+- **`Config.Locale`**: Which locale file to use for UI text (example: `"en"`).
+- **`Config.Debug`**: Extra prints/logs for troubleshooting.
+- **`Config.PrimaryColor`**: Main UI color (hex).
+
+### Damage details
+
+- **`Config.MaxDamageTime`**: How long (seconds) a damage entry is considered “recent enough” to show in the UI after death.
+
+### Death system behavior
+
+- **`Config.UsePrismDeathSystem`**: If `true`, Prism handles the death flow/animations. Set `false` if your ambulance script already forces its own death/writhe/animation logic.
+- **`Config.DistanceRefreshInterval`**: How often (seconds) the dispatch distance updates for dead players. Higher player counts should avoid very low values.
+
+### State bag (developer-friendly)
+
+- **`Config.DeathStatebag.enabled`**: If `true`, `prism_deathscreen` updates a state bag on death/respawn.
+- **`Config.DeathStatebag.name`**: State bag name to write to (default: `prismDead`).
+  - When enabled, scripts can check `Player(serverId).state[Config.DeathStatebag.name]` to see who is dead.
+
+### Respawn timers
+
+- **`Config.TimerDuration`**: When the “Respawn” option becomes available (seconds).
+- **`Config.BleedoutTimer`**: When respawn is forced (seconds).
+
+### Wasabi compatibility
+
+- **`Config.UseWasabiRecoverySystem`**: Only matters for `wasabi_ambulance`. If `true`, respawn/recovery follows Wasabi’s flow.
+- **`Config.EnableHospitalChoice`**: Let players pick a hospital from `Config.RespawnCoords`.
+  - If `false`, the first entry is used.
+  - Not compatible with `wasabi_ambulance` when `Config.UseWasabiRecoverySystem = true`.
+- **`Config.RespawnAtNearestHospital`**: If hospital choice is disabled (or player bleeds out), spawn at the nearest hospital.
+
+### UI/controls during death
+
+- **`Config.DeathSettings.disablePauseMenu`**: Disables ESC menu while dead.
+- **`Config.DeathSettings.hideRadar`**: Hides minimap while dead.
+- **`Config.DeathSettings.DisableControls`**: Disable specific controls while dead.
+  - **`keys`**: Control IDs to disable (example: `245` = chat key).
+
+### Advanced hooks
+
+- **`Config.deadLoopFunciton`**: A function called every 100ms while dead.
+  - Use this to add server-specific logic while a player is dead.
+
+### Respawn locations
+
+- **`Config.RespawnCoords`**: List of hospitals the player can choose from.
+  - Each entry is `{ name, coords = vector4(x, y, z, heading) }`.
+
+### Dispatch & syncing
+
+- **`Config.SyncCooldown`**: Cooldown for syncing death state (seconds).
+- **`Config.DispatchCooldown`**: Cooldown for dispatch actions (seconds).
+
+### Death animation config
+
+- **`Config.DeathAnimation.enabled`**: If enabled, waits for the player to stop so the death looks natural (doesn’t instantly snap/sync).
+- **`dict` / `clip`**: Separate animation dict/clip for vehicle vs normal deaths.
+
+### Weapon image fallback
+
+- **`Config.FallbackWeaponImg`**: Image used when no weapon was detected.

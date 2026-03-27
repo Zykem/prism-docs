@@ -198,6 +198,15 @@ export default {
       collapsed: true
     },
   },
+  deathscreen: {
+    title: '💀 Prism Deathscreen',
+    theme: {
+      breadcrumb: false,
+      pagination: true,
+      copyPage: false,
+      collapsed: true
+    },
+  },
   outfitbag: {
     title: '👜 Prism Outfit Bag',
     theme: {
