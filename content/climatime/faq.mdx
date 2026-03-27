@@ -1,0 +1,69 @@
+import { Callout } from 'nextra/components'
+
+# FAQ
+
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>Frequently asked questions about Climatime.</div>
+
+## General
+
+### Does Climatime replace qb-weathersync?
+Yes. Climatime registers as a drop-in replacement. Any script calling `exports['qb-weathersync']` will automatically route to Climatime. Remove qb-weathersync before installing.
+
+### Which frameworks are supported?
+QBCore, QBX, and ESX with automatic detection. No configuration needed.
+
+### Can I use Climatime without a framework?
+Yes. Admin permissions fall back to ACE permissions when no framework is detected.
+
+## Weather
+
+### How does temperature work?
+Each weather type has a base temperature that shifts based on the in-game time of day. Noon is warmest (+3C), 3 AM is coldest (-4C). Other resources can read the temperature via exports to implement survival effects.
+
+### Can other scripts read the weather data?
+Yes. Climatime exposes temperature, humidity, wind, and forecast data through both server and client exports. See the [Exports](/climatime/exports) page for details.
+
+### What happens to zones when I change weather manually?
+By default, zones are deactivated (kept in DB but not active). This is configurable via `Config.ClearZonesOnWeatherChange` — set to `false` to keep zones active.
+
+## Scheduling
+
+### What's the difference between Hourly and Seasonal?
+**Hourly** cycles through presets in order with a fixed duration (minutes). **Seasonal** randomly picks weather based on chance weights, with different profiles per season and optional time-of-day boosting.
+
+### Can I use both Hourly and Seasonal at the same time?
+No. Only one mode can be active. Enabling one stops the other. Your presets and profiles are preserved when switching.
+
+### What happens when I manually change weather while a schedule is running?
+Depends on `Config.ScheduleOverrideBehavior`:
+- `'stop'` (default) — schedule stops, you must re-enable it
+- `'temporary'` — your change applies, but the schedule picks new weather on the next cycle tick
+
+### Do schedules survive server restarts?
+Yes. The active mode, current weather, and remaining duration are saved to KVP storage and restored on restart.
+
+## Zones
+
+### Can I create zones on Cayo Perico?
+Yes. The zones page map includes both Los Santos and Cayo Perico. Scroll southeast from LS to find the island. Use "Get Current Position" while on Cayo to place a zone there — the map will fly to your location.
+
+### How do overlapping zones work?
+Zones use a stack — the innermost zone (last entered) takes priority. Exiting a zone reverts to the next zone in the stack, or to global weather if no zones remain.
+
+### Is there a minimum zone radius?
+Yes. The minimum is 200 game units (configurable via `Config.MinZoneRadius`).
+
+## Updating
+
+### Will updating break my existing schedule presets?
+No. The hourly presets table (`climatime_schedules`) is never modified. New features use separate tables.
+
+### I had the monthly scheduling from a previous version. What happened?
+Monthly scheduling was replaced by the Seasonal system. Your old monthly data remains in the database but is not used. The Seasonal system is more powerful — it supports random weather, chance weights, and time-of-day awareness.
+
+### Do I need to change my config file when updating?
+Check the [Config](/climatime/config) page for any new options. `Config.ScheduleOverrideBehavior` replaces the old `Config.DisableScheduleOnWeatherChange`.

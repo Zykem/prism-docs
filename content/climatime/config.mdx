@@ -1,0 +1,133 @@
+# Config
+
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>All Prism Scripts contain various editable and unobscured files containing, exports, client<br/> and server functions, configuration methods and more.</div>
+
+## Config
+
+```lua filename="shared/config.lua" copy
+Config = {}
+
+-- ─────────────────────────────────────────────────────────────
+-- Admin Settings
+-- ─────────────────────────────────────────────────────────────
+
+Config.AdminGroups = { 'admin', 'superadmin', 'owner' }
+
+-- ─────────────────────────────────────────────────────────────
+-- UI Settings
+-- ─────────────────────────────────────────────────────────────
+
+Config.Command = 'climatime'     -- Chat command name (e.g. /climatime)
+Config.Keybind = 'F6'            -- Set to false to disable keybind entirely
+Config.TimeFormat = '24h'        -- '12h' for AM/PM display, '24h' for 24-hour clock
+
+-- Custom font: place your .ttf file in web/fonts/ and set the filename below
+-- Leave empty to use the default Gilroy font
+Config.FontFile = ''             -- e.g. 'Montserrat.ttf'
+
+-- Tablet prop animation when opening the panel
+Config.TabletAnimation = true    -- Set to false to disable tablet prop and ped animation
+Config.TabletProp = 'prop_cs_tablet'
+
+-- ─────────────────────────────────────────────────────────────
+-- Theme
+-- Accent color for the UI (buttons, active states, sliders)
+-- ConVar override: setr climatime:primaryColor "#FF5500"
+-- ─────────────────────────────────────────────────────────────
+
+Config.PrimaryColor = '#BEEE11'
+
+-- ─────────────────────────────────────────────────────────────
+-- Weather Settings
+-- ─────────────────────────────────────────────────────────────
+
+Config.WeatherTypes = {
+    { id = 'EXTRASUNNY',  label = 'Extra Sunny', windSpeed = 0.05, windDirection = 0.0 },
+    { id = 'CLEAR',       label = 'Clear',       windSpeed = 0.1,  windDirection = 0.0 },
+    { id = 'CLEARING',    label = 'Clearing',     windSpeed = 0.5,  windDirection = 180.0 },
+    { id = 'CLOUDS',      label = 'Clouds',       windSpeed = 0.5,  windDirection = 0.0 },
+    { id = 'OVERCAST',    label = 'Overcast',     windSpeed = 1.0,  windDirection = 120.0 },
+    { id = 'SMOG',        label = 'Smog',         windSpeed = 0.05, windDirection = 0.0 },
+    { id = 'FOGGY',       label = 'Foggy',        windSpeed = 0.1,  windDirection = 0.0 },
+    { id = 'RAIN',        label = 'Rain',         windSpeed = 2.0,  windDirection = 240.0 },
+    { id = 'THUNDER',     label = 'Thunder',      windSpeed = 8.0,  windDirection = 180.0 },
+    { id = 'SNOW',        label = 'Snow',         windSpeed = 1.0,  windDirection = 120.0 },
+    { id = 'BLIZZARD',    label = 'Blizzard',     windSpeed = 3.0,  windDirection = 120.0 },
+    { id = 'SNOWLIGHT',   label = 'Light Snow',   windSpeed = 0.5,  windDirection = 120.0 },
+    { id = 'XMAS',        label = 'Christmas',    windSpeed = 0.3,  windDirection = 0.0 },
+    { id = 'HALLOWEEN',   label = 'Halloween',    windSpeed = 1.5,  windDirection = 200.0 },
+}
+
+Config.DefaultWeather = 'CLEAR'
+Config.TransitionDuration = 15.0   -- seconds for global weather transitions
+Config.FreezeWeatherOnStart = false
+Config.NotifyPlayersOnWeatherChange = true  -- show notification to all players
+Config.AutoSnowOnGround = true     -- auto-enable ground snow for snow weather types
+
+-- ─────────────────────────────────────────────────────────────
+-- Time Settings
+-- ─────────────────────────────────────────────────────────────
+
+Config.DefaultTime = { hour = 12, minute = 0 }
+Config.FreezeTimeOnStart = false
+Config.SyncInterval = 5000         -- ms between time syncs to clients
+Config.GameMinuteDuration = 2000   -- ms per in-game minute (lower = faster time)
+Config.SmoothTimeTransition = true  -- smoothly transition to new time instead of jumping
+Config.TimeTransitionDuration = 30  -- seconds for a full time transition
+
+-- Time control mode:
+--   'managed'  = Climatime controls time (default, current behavior)
+--   'realtime' = In-game time syncs to real server wall clock
+--   'disabled' = Climatime does not manage time (let other resources handle it)
+Config.TimeMode = 'managed'
+
+-- Timezone offset (hours) for realtime mode. e.g. -5 for EST, 1 for CET, 0 for server local time
+Config.TimezoneOffset = 0
+
+-- ─────────────────────────────────────────────────────────────
+-- Rate Limiting
+-- ─────────────────────────────────────────────────────────────
+
+Config.RateLimits = {
+    SetWeather      = { cooldown = 500,  maxBurst = 10, window = 60000 },
+    SetTime         = { cooldown = 500,  maxBurst = 10, window = 60000 },
+    ToggleWeather   = { cooldown = 300,  maxBurst = 20, window = 60000 },
+    SaveZone        = { cooldown = 1000, maxBurst = 5,  window = 60000 },
+    DeleteZone      = { cooldown = 1000, maxBurst = 5,  window = 60000 },
+    SaveSchedule    = { cooldown = 500,  maxBurst = 10, window = 60000 },
+    DeleteSchedule  = { cooldown = 500,  maxBurst = 10, window = 60000 },
+    GetData         = { cooldown = 200,  maxBurst = 10, window = 60000 },
+    Default         = { cooldown = 200,  maxBurst = 30, window = 60000 },
+}
+
+-- ─────────────────────────────────────────────────────────────
+-- Zone Behavior
+-- ─────────────────────────────────────────────────────────────
+
+-- What happens to weather zones when global weather is changed:
+--   'disable' = deactivate zones (keep in DB, stop weather override)
+--   'delete'  = permanently delete all zones from DB
+--   false     = do nothing, zones continue to override
+Config.ClearZonesOnWeatherChange = 'disable'
+
+-- What happens to the active schedule when admin manually changes weather?
+--   'stop'      = schedule auto-deactivates, admin must re-enable (recommended)
+--   'temporary' = schedule stays active, next cycle tick picks new weather automatically
+Config.ScheduleOverrideBehavior = 'stop'
+
+-- Minimum radius for weather zones (in game units, ~meters)
+Config.MinZoneRadius = 200
+
+-- Transition duration when entering/exiting weather zones (seconds)
+Config.ZoneTransitionDuration = 10.0
+
+-- ─────────────────────────────────────────────────────────────
+-- Debug
+-- ─────────────────────────────────────────────────────────────
+
+Config.Debug = false
+```

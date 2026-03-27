@@ -216,8 +216,8 @@ export default {
       collapsed: true
     },
   },
-  crafting: {
-    title: '🔨 Prism Crafting',
+  climatime: {
+    title: '🌦️ Prism Climatime',
     theme: {
       breadcrumb: false,
       pagination: true,
