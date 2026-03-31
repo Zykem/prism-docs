@@ -1,0 +1,146 @@
+import { Callout } from 'nextra/components'
+
+# Features
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>Complete overview of all Prism CarPlay features and apps</div>
+
+## Home Dashboard
+
+The home tab serves as your vehicle command center with real-time information and quick controls.
+
+- **Interactive Map** - Real-time player position tracking with double-click GPS waypoint setting, live distance counter, and street name display
+- **Climate Section** - Current temperature, weather conditions, and a 4-card weather forecast (-2h, now, +2h, +4h)
+- **Quick Controls** - 4 control cards for Doors, Trunk, Seatbelt, and Windows with live state indicators
+- **Mini Music Player** - Album art, song info, progress bar, and full playback controls
+
+---
+
+## Music Player
+
+A full-featured music player with YouTube integration and spatial audio.
+
+- **YouTube Integration** - Paste any YouTube URL to auto-detect title, duration, and thumbnail
+- **Playback Controls** - Play/pause, previous/next, 10-second seek, volume slider, and draggable progress bar
+- **Queue & Recent** - Manage upcoming songs with a queue system and view recently played tracks
+- **Music Library** - Pre-configured songs available instantly (configurable in `config.lua`)
+
+### Spatial Audio System
+
+<Callout type="info">
+  Music features a realistic spatial audio system with low-pass filtering. Players outside the vehicle hear muffled, bass-heavy audio that fades over distance (max 15 meters). The filter disengages when a door is open or a window is broken.
+</Callout>
+
+---
+
+## Dashcam
+
+A fullscreen dashcam overlay with recording capabilities.
+
+- **Fullscreen Overlay** - HDR & 4K quality badges, WASD movement indicators
+- **Camera Rotation** - Toggle between front and rear camera views
+- **Recording** - Start/stop recording with a live timer indicator (configurable max duration)
+- **Storage Options** - Save recordings locally or upload to [Fivemanage](https://www.fivemanage.com/) cloud
+
+---
+
+## Recordings
+
+View and manage all dashcam recordings.
+
+- **Recording Grid** - Thumbnails with auto-generated names, duration, and date
+- **Playback** - Fullscreen video player for watching recordings
+- **Management** - Delete individual recordings or clear all at once
+- **Cloud Upload** - Upload local recordings to Fivemanage with status indicators
+
+---
+
+## Vehicle Management
+
+Full vehicle control through an interactive diagram.
+
+- **Vehicle Diagram** - Top-down view with 6 clickable positions (hood, doors, trunk) showing real-time open/closed states
+- **Seat Selection** - Switch to seat diagram and click to move between Driver, Passenger, Rear Left, and Rear Right seats
+- **Control Cards**:
+  - **Lock/Unlock** - Toggle vehicle lock state
+  - **Seat Selection** - Switch diagram mode
+  - **Engine** - Start/stop with visual feedback
+  - **Lights** - Toggle headlights
+
+### Vehicle Information Gauges
+
+- Fuel percentage
+- Engine health
+- Body health
+- Tire condition
+- Temperature (°F)
+- Drivetrain type (AWD/FWD/RWD)
+
+---
+
+## Statistics (Tuner Chip Required)
+
+<Callout type="warning">
+  The Statistics tab requires a **Tuner Chip** to be installed. Use the `tunerchip` item or `/tunerchip` command to install one.
+</Callout>
+
+Fine-tune your vehicle's performance with 4 circular slider controls (0-100%):
+
+| Stat | Handling Property | Effect |
+|------|------------------|--------|
+| **Boost Power** | `fInitialDriveMaxFlatVel` | Increases top speed (up to +50%) |
+| **Gear Change** | `fClutchChangeRateScaleUpShift` | Faster gear shifts (up to +100%) |
+| **Acceleration** | `fInitialDragCoeff` | Reduces drag for faster acceleration (up to -50%) |
+| **Braking Speed** | `fBrakeForce` | Increases brake force (up to +100%) |
+
+Each slider has a reset button to revert individual stats. All changes are applied in real-time and persist per vehicle plate.
+
+---
+
+## Modifications (Tuner Chip Required)
+
+<Callout type="warning">
+  The Modifications tab requires a **Tuner Chip** to be installed.
+</Callout>
+
+### Drive Modes
+
+| Mode | Description |
+|------|-------------|
+| **Sports** | +15% top speed, -15% drag, +10% brakes, +5% traction, stiffer suspension |
+| **Drift** | Loose traction, reduced drag/inertia, increased steering lock, reduced lateral grip |
+| **Eco** | -10% top speed, +15% drag, -5% brakes — fuel efficient, smooth ride |
+| **Normal** | Resets all modifications to stock handling |
+
+### Neon Customization
+
+- **Color Picker** - 2D gradient picker with hue slider for full color selection
+- **Light Patterns** - Solid, Pulse, Flash, and Fade effects
+- **Neon Locations** - Toggle Front, Rear, Left, and Right neons independently
+- **Clear All** - Disable all neons with one button
+
+---
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `/carplay` | Open/close the CarPlay interface |
+| `/tunerchip` | Install or remove a tuner chip |
+
+## Keybind
+
+The default keybind to open CarPlay is **F5** (configurable in `config.lua`).
+
+## Localization
+
+Prism CarPlay supports multiple languages:
+- **English** (`en`) - Full implementation
+- **Spanish** (`es`) - Full implementation
+
+Set the language using the `carplay:locale` convar in your `server.cfg`:
+```cfg copy
+set carplay:locale "en"
+```
