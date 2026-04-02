@@ -234,4 +234,22 @@ export default {
       collapsed: true
     },
   },
+  crafting: {
+    title: '🔨 Prism Crafting',
+    theme: {
+      breadcrumb: false,
+      pagination: true,
+      copyPage: false,
+      collapsed: true
+    },
+  },
+  carplay: {
+    title: '📱 Prism CarPlay',
+    theme: {
+      breadcrumb: false,
+      pagination: true,
+      copyPage: false,
+      collapsed: true
+    },
+  },
 }

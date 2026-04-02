@@ -1,0 +1,72 @@
+import { Callout } from 'nextra/components'
+
+# Items Setup
+
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>Item definitions for prism_crafting</div>
+
+## Crafting Table Item
+
+You will need to add the crafting table item to your inventory system. Choose the section below that matches your setup.
+
+### QBCore
+
+Add the following to your QBCore shared items:
+
+```lua filename="qb-core/shared/items.lua" copy
+crafting_table = { name = 'crafting_table', label = 'Crafting Table', weight = 250, type = 'item', image = 'crafting_table.png', unique = true, useable = true, shouldClose = true, combinable = nil, description = 'A table for crafting items' },
+```
+
+### OX Inventory
+
+Add the following to your ox_inventory items:
+
+```lua filename="ox_inventory/data/items.lua" copy
+['crafting_table'] = {
+    label = 'Portable Crafting Table',
+    weight = 5000,
+    stack = false,
+    close = true,
+    description = 'A portable crafting table that can be placed anywhere',
+    client = {
+        export = 'prism_crafting.useCraftingTable'
+    }
+},
+```
+
+## Blueprint Items
+
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>Blueprints are used to unlock crafting recipes. Below are some examples you can add to your inventory system.</div>
+
+<Callout type="info">
+  These are examples — you can create as many blueprint items as needed for your server's crafting recipes.
+</Callout>
+
+### OX Inventory
+
+```lua filename="ox_inventory/data/items.lua" copy
+['pistol_blueprint'] = {
+    label = 'Pistol Blueprint',
+    weight = 80,
+    durability = 100,
+},
+
+['smg_blueprint'] = {
+    label = 'SMG Blueprint',
+    weight = 80,
+    durability = 100,
+},
+
+['rifle_blueprint'] = {
+    label = 'Rifle Blueprint',
+    weight = 80,
+    durability = 100,
+},
+```

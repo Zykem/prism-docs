@@ -1,0 +1,72 @@
+import { Callout } from 'nextra/components'
+
+# Installation
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>Basic installation instructions for prism_carplay</div>
+
+
+## Asset download
+
+<Callout type="info">
+  To find the asset, you must have made the purchase using your own keymaster account. Otherwise, you can use the transfer system to move the asset to a different keymaster account.
+</Callout>
+
+<div className='text-lg mt-5'>
+    Once the purchase is made on our official website, you will receive your asset directly in your [cfx portal](https://portal.cfx.re/) in your own panel you can download the asset and install it following the following documentation.
+</div>
+
+## Dependencies
+
+- **[prism-mediatool](https://portal.cfx.re/)** - Provides `medialib`, received via portal
+
+<Callout type="error">
+  `prism-mediatool` must be started **before** prism_carplay in your server.cfg.
+</Callout>
+
+## Installation
+
+- **Ensure all dependencies are installed** [ [prism-mediatool](https://portal.cfx.re/) ]
+- **Edit configuration as desired** (Optional)
+- **Drag-and-drop our script** : Drag `prism_carplay` in to your `resources` directory and add `ensure prism_carplay` to your `server.cfg` after all dependencies.
+- **Restart your server**.
+
+## Item Setup (Tuner Chip)
+
+<div className='text-lg mt-2'>
+    The tuner chip item (`tunerchip`) is required to unlock the Statistics and Modifications tabs. Add the item to your framework's item list:
+</div>
+
+**QBCore / QBX:**
+```lua copy
+['tunerchip'] = {
+    name = 'tunerchip',
+    label = 'Tuner Chip',
+    weight = 200,
+    type = 'item',
+    image = 'tunerchip.png',
+    unique = true,
+    useable = true,
+    shouldClose = true,
+    description = 'A performance tuner chip for vehicle modifications'
+},
+```
+
+**ESX:**
+```sql copy
+INSERT INTO `items` (`name`, `label`, `weight`) VALUES ('tunerchip', 'Tuner Chip', 200);
+```
+
+<Callout type="info">
+  The item image (`tunerchip.png`) is included in the `ITEM IMAGES` folder of the resource.
+</Callout>
+
+## Framework Compatibility
+
+Prism CarPlay works **standalone** and does not require ESX or QBCore to function. However, it supports framework item systems for the tuner chip feature:
+
+- **ESX** - `RegisterUsableItem` for tuner chip
+- **QBCore** - `CreateUseableItem` for tuner chip
+- **Standalone** - Use the `/tunerchip` command instead

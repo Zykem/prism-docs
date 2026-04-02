@@ -1,0 +1,207 @@
+# Exports & Events
+
+<div className='text-lg mt-2'
+    style={{
+        color: 'rgb(185, 198, 162)'
+    }}
+>All Prism Scripts contain various export functions that can be used to interact with the script.</div>
+
+
+## Server Side Exports
+
+### Audio System
+
+These exports allow other resources to control the spatial audio system used by CarPlay's music player.
+
+#### AddAudioSource
+```lua copy
+---@param id string Unique identifier for the audio source
+---@param url string URL or file path of the audio
+---@param options table Audio options (volume, loop, etc.)
+---@param cb function Callback when audio is ready
+
+exports['prism_carplay']:AddAudioSource(id, url, options, cb)
+```
+
+#### RemoveAudioSource
+```lua copy
+---@param id string The audio source identifier
+
+exports['prism_carplay']:RemoveAudioSource(id)
+```
+
+#### AddSpeaker
+```lua copy
+---@param id string The audio source identifier
+---@param coords vector3 Speaker position
+---@param options table Speaker options (range, rolloff, etc.)
+---@param sid number Server ID of the entity
+
+exports['prism_carplay']:AddSpeaker(id, coords, options, sid)
+```
+
+#### PlayAudioSource
+```lua copy
+---@param id string The audio source identifier
+
+exports['prism_carplay']:PlayAudioSource(id)
+```
+
+#### PauseAudioSource
+```lua copy
+---@param id string The audio source identifier
+
+exports['prism_carplay']:PauseAudioSource(id)
+```
+
+#### ResumeAudioSource
+```lua copy
+---@param id string The audio source identifier
+
+exports['prism_carplay']:ResumeAudioSource(id)
+```
+
+#### SeekAudioSource
+```lua copy
+---@param id string The audio source identifier
+---@param time number Time in seconds to seek to
+
+exports['prism_carplay']:SeekAudioSource(id, time)
+```
+
+#### SetSpeakerVolume
+```lua copy
+---@param id string The audio source identifier
+---@param volume number Volume level (0.0 - 1.0)
+
+exports['prism_carplay']:SetSpeakerVolume(id, volume)
+```
+
+#### SetLoop
+```lua copy
+---@param id string The audio source identifier
+---@param loop boolean Whether to loop the audio
+
+exports['prism_carplay']:SetLoop(id, loop)
+```
+
+---
+
+### Fivemanage Integration
+
+#### uploadFivemanage
+```lua copy
+---@param filePath string Local file path to upload
+---@param filename string Desired filename on Fivemanage
+---@param callback function Callback with upload result
+
+exports['prism_carplay']:uploadFivemanage(filePath, filename, callback)
+```
+
+#### deleteFivemanage
+```lua copy
+---@param fileId string The Fivemanage file ID to delete
+---@param callback function Callback with deletion result
+
+exports['prism_carplay']:deleteFivemanage(fileId, callback)
+```
+
+---
+
+## Network Events
+
+### Server Events (Client → Server)
+
+| Event | Description |
+|-------|-------------|
+| `prism-carplay:server:getTunerChipData` | Request tuner chip data for a vehicle |
+| `prism-carplay:server:saveTunerChipData` | Save tuner chip values |
+| `prism-carplay:server:getModificationsData` | Request modification data for a vehicle |
+| `prism-carplay:server:saveModificationsData` | Save modification values |
+| `prism-carplay:server:startRecording` | Start dashcam recording |
+| `prism-carplay:server:stopRecording` | Stop dashcam recording |
+| `prism-carplay:server:getRecordings` | Request recordings list |
+| `prism-carplay:server:deleteRecording` | Delete a recording |
+| `prism-carplay:server:clearAllRecordings` | Clear all recordings |
+| `prism-carplay:server:uploadRecording` | Upload recording to Fivemanage |
+| `prism-carplay:server:playMusic` | Play music on vehicle speaker |
+| `prism-carplay:server:toggleMusic` | Toggle play/pause |
+| `prism-carplay:server:stopMusic` | Stop music playback |
+| `prism-carplay:server:seekMusic` | Seek to time position |
+| `prism-carplay:server:setMusicVolume` | Set music volume |
+| `prism-carplay:server:getMusicState` | Request current music state |
+
+### Client Events (Server → Client)
+
+| Event | Description |
+|-------|-------------|
+| `prism-carplay:client:receiveTunerChipData` | Receive tuner chip data |
+| `prism-carplay:client:tunerChipDataUpdated` | Broadcast tuner chip changes |
+| `prism-carplay:client:receiveModificationsData` | Receive modification data |
+| `prism-carplay:client:modificationsDataUpdated` | Broadcast modification changes |
+| `prism-carplay:client:uploadComplete` | Recording upload completed |
+| `prism-carplay:client:uploadFailed` | Recording upload failed |
+| `prism-carplay:client:receiveRecordings` | Receive recordings list |
+| `prism-carplay:client:recordingSaved` | Recording saved notification |
+| `prism-carplay:client:musicStarted` | Music playback started |
+| `prism-carplay:client:playbackStatus` | Play/pause status update |
+| `prism-carplay:client:musicStopped` | Music playback stopped |
+| `prism-carplay:client:trackEnded` | Track ended (triggers queue auto-play) |
+| `prism-carplay:client:syncMusicState` | Sync music state when entering vehicle |
+
+---
+
+## NUI Callbacks
+
+These callbacks are used internally between the client Lua scripts and the web UI.
+
+| Callback | Description |
+|----------|-------------|
+| `closeMenu` | Close the CarPlay UI |
+| `setWaypoint` | Set GPS waypoint on map |
+| `toggleDoors` | Open/close all doors |
+| `toggleTrunk` | Open/close trunk |
+| `toggleSeatbelt` | Fasten/unfasten seatbelt |
+| `toggleWindows` | Raise/lower all windows |
+| `toggleLock` | Lock/unlock vehicle |
+| `toggleEngine` | Start/stop engine |
+| `toggleLights` | Toggle headlights |
+| `toggleDoor` | Open/close a specific door |
+| `selectSeat` | Move player to a specific seat |
+| `getVehicleInfo` | Get current vehicle stats |
+| `getTunerChipValues` | Get tuner chip settings |
+| `setTunerChipValue` | Update a tuner setting |
+| `removeTunerChip` | Remove installed tuner chip |
+| `getModificationsData` | Get modification data |
+| `saveModificationsData` | Save modification data |
+| `setDriveMode` | Change drive mode |
+| `startDashcam` | Activate dashcam view |
+| `stopDashcam` | Deactivate dashcam view |
+| `rotateDashcam` | Toggle front/rear camera |
+| `startRecording` | Start video recording |
+| `stopRecording` | Stop video recording |
+| `getRecordings` | Get recordings list |
+| `deleteRecording` | Delete a recording |
+| `clearAllRecordings` | Clear all recordings |
+| `uploadRecording` | Upload recording to cloud |
+| `getMusicLibrary` | Get configured music library |
+| `fetchYouTubeData` | Fetch YouTube video metadata |
+| `playMusic` | Play a song |
+| `getMusicTime` | Get current playback time |
+| `toggleMusic` | Toggle play/pause |
+| `stopMusic` | Stop music playback |
+| `seekMusic` | Seek to time position |
+| `setMusicVolume` | Set volume level |
+| `getMusicState` | Get current music state |
+
+---
+
+## Data Persistence
+
+All data is stored server-side using FiveM's KVP (Key-Value Pair) system and persists across server restarts.
+
+| Data | KVP Key | Scope |
+|------|---------|-------|
+| Tuner chip settings | `tunerchip_[PLATE]` | Per vehicle (by plate) |
+| Modification data | `modifications_[PLATE]` | Per vehicle (by plate) |
+| Dashcam recordings | `dashcam_recordings_[IDENTIFIER]` | Per player |

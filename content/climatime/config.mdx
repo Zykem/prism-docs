@@ -79,6 +79,15 @@ Config.GameMinuteDuration = 2000   -- ms per in-game minute (lower = faster time
 Config.SmoothTimeTransition = true  -- smoothly transition to new time instead of jumping
 Config.TimeTransitionDuration = 30  -- seconds for a full time transition
 
+-- Time control mode:
+--   'managed'  = Climatime controls time (default, current behavior)
+--   'realtime' = In-game time syncs to real server wall clock
+--   'disabled' = Climatime does not manage time (let other resources handle it)
+Config.TimeMode = 'managed'
+
+-- Timezone offset (hours) for realtime mode. e.g. -5 for EST, 1 for CET, 0 for server local time
+Config.TimezoneOffset = 0
+
 -- ─────────────────────────────────────────────────────────────
 -- Rate Limiting
 -- ─────────────────────────────────────────────────────────────
