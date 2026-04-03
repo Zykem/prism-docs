@@ -1,0 +1,33 @@
+import { Callout } from 'nextra/components'
+
+# Installation
+
+<div className='text-lg mt-2' style={{ color: 'rgb(185, 198, 162)' }}>
+Basic setup and installation guide for Prism Advanced Pause Menu v2.
+</div>
+
+<Callout type="error">
+  **WARNING**: The resource directory must be named exactly `prism_pausemenuv2` (or the folder name you configured in your fxmanifest) to operate properly.
+</Callout>
+
+## Prerequisites
+
+Before starting, ensure that you have installed the required dependencies:
+- **[ox_lib](https://github.com/communityox/ox_lib/releases)**: Required for callbacks and UI functionality.
+- **[baseevents](https://github.com/citizenfx/cfx-server-data/tree/master/resources/%5Bsystem%5D/baseevents)**: Recommended for automatic death and kill tracking out of the box.
+
+## Setup Instructions
+
+1. **Download Resource**: Download your asset from your Keymaster portal.
+2. **Transfer**: Extract the files and drag the `prism_pausemenuv2` folder into your `resources` directory.
+3. **Configuration**: Edit `shared/config.lua` or `server/serverConfig.lua` to suit your server's needs.
+4. **Server Config**: Open your `server.cfg` file and add the following line **after** your dependencies:
+   ```cfg
+   ensure ox_lib
+   ensure prism_pausemenuv2
+   ```
+5. **Restart Server**: Start or restart your server to apply the changes.
+
+<Callout type="info">
+  **Note on Database**: Version 2 uses a highly optimized local JSON database (`data/player_stats.json` & `data/reports_history.json`). No SQL imports are required!
+</Callout>
