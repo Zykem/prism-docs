@@ -42,6 +42,9 @@ Config.DefaultSettings = {
     -- 0    = fully at the right edge
     -- ↑    = higher value moves the radio LEFT
     radio_right = 17,
+
+    -- Default saved nickname (empty string = no saved nickname)
+    savedNickname = '',
 }
 
 -- Radiolist style
@@ -105,6 +108,9 @@ Config.RadioProp = {
 Config.AllowNicknameChange = true
 Config.MinNicknameLength = 3
 Config.MaxNicknameLength = 20
+
+-- When true, players cannot open the settings page in the radio UI.
+Config.DisableSettings = false
 
 -- Automatically disconnect player from radio channel on death?
 Config.DisconnectOnDeath = true
@@ -240,5 +246,6 @@ Config.Inventory = "auto"
 
 -- Debug mode
 Config.Debug = true
+
 
 ```
