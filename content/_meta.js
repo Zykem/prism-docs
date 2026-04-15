@@ -26,6 +26,15 @@ export default {
       collapsed: true
     },
   },
+  pausemenuv2: {
+    title: '🖼️ Prism Pause Menu v2',
+    theme: {
+      breadcrumb: false,
+      pagination: true,
+      copyPage: false,
+      collapsed: true
+    },
+  },
   inventory: {
     title: '🗃️ Prism Inventory',
     theme: {
