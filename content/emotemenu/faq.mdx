@@ -21,7 +21,7 @@ Yes, the UI is fully customizable. You can modify the styling in the `web/src` d
 First, make sure you have `prism_mediatool` installed from your keymaster account (includes `ts-recorder` and `ts-medialib`). Then add your custom emote entry to `client/AnimationList.lua`. Finally, use the `/recordemotes` command in-game. The system will automatically record your animations based on the AnimationList.lua entries and save them to `ts-recorder/recordings/processed`.
 
 ### Where do I put custom animation files?
-After recording with `/recordemotes`, copy all recorded animation files from `ts-recorder/recordings/processed` and paste them into `prism-emoteassets/animations` folder. The emote entries should already be in `client/AnimationList.lua` from before you recorded them.
+After recording with `/recordemotes`, copy all recorded animation files from `ts-recorder/recordings/processed` and paste them into `prism-emotemenu/animations` folder. The emote entries should already be in `client/AnimationList.lua` from before you recorded them.
 
 ### My custom emotes aren't showing up
 <Callout type="warning">
@@ -29,9 +29,8 @@ After recording with `/recordemotes`, copy all recorded animation files from `ts
   1. Installed `prism_mediatool` from your keymaster (includes `ts-recorder` and `ts-medialib`)
   2. Added the emote entries to `client/AnimationList.lua` BEFORE recording
   3. Used `/recordemotes` command to record the animations
-  4. Copied the files from `ts-recorder/recordings/processed` to `prism-emoteassets/animations`
+  4. Copied the files from `ts-recorder/recordings/processed` to `prism-emotemenu/animations`
   5. Restarted the resource after adding new emotes
-  6. Verified that `prism-emoteassets` is properly installed
 </Callout>
 
 ## Troubleshooting
@@ -48,7 +47,6 @@ After recording with `/recordemotes`, copy all recorded animation files from `ts
 
 ### Animations not playing correctly
 - Verify the animation files are in the correct format
-- Ensure `prism-emoteassets` is loaded before `prism-emotemenu`
 - Check that the animation dictionaries are properly loaded
 
 ## Performance
