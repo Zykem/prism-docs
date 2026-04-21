@@ -12,29 +12,23 @@ import { Callout } from 'nextra/components'
 <Callout type={'warning'}>We recommend performing these steps on an empty server with no players online, and avoiding any activity on your PC during the process.</Callout>
 
 ### Dependencies :
-- prism_mediatool (Provided for free)
+- [uz_AutoShot](https://github.com/uz-scripts/uz_AutoShot) (open source)
 - yarn ( comes with fivem by default )
 
 <Steps>
 
 ### Step 1
 
-Simply place the resource in your resources folder
+Download [uz_AutoShot](https://github.com/uz-scripts/uz_AutoShot) and place the resource in your resources folder.
 Do not use a subfolder like `resources/[scripts]` as it will cause the script to malfunction.
 
 ### Step 2
 
-Open your `server.cfg`, make sure the resources are started, then restart your server and load in.
+Open your `server.cfg`, make sure `uz_AutoShot` and `illenium-appearance` are started, then restart your server and load in.
 
 ### Step 3
 
-Once all photos have been successfully taken, navigate to `ts-recorder/recordings/clothing` and copy all the images in that folder. Then go to `illenium-appearance/web/dist/clothing` and paste the images there.
-
-Do the same for the following locations: 
-
-`ts-recorder/recordings/overlays` --> `illenium-appearance/web/dist/clothing`
-
-`ts-recorder/recordings/tattoos`  --> `illenium-appearance/web/dist/clothing`
+In-game, run `/shotmaker` to open the capture studio and start the batch capture for clothing, overlays, and tattoos. No copying required — the appearance UI pulls the images directly from `uz_AutoShot`.
 
 ### Step 4
 
@@ -45,5 +39,6 @@ Restart your server and load in!
 # Additional Commands
 
 ```txt copy
-/screenshot  -- TO TAKE CLOTHING SCREENSHOTS
+/shotmaker  -- OPEN THE CAPTURE STUDIO TO TAKE CLOTHING SCREENSHOTS
+/wardrobe   -- BROWSE GENERATED THUMBNAILS
 ```
