@@ -1,0 +1,148 @@
+import { Callout } from 'nextra/components'
+
+# Configuration
+
+<div className='text-lg mt-2' style={{ color: 'rgb(185, 198, 162)' }}>
+Reference for configuring the UI appearance, commands, and webhook logging systems.
+</div>
+
+## Shared Configuration
+
+The primary configuration file determining themes, language, and client interactions can be found in `shared/config.lua`.
+
+```lua filename="shared/config.lua" copy
+return {
+    Config = {
+        -- GENERAL SETTINGS
+        Theme = {
+            -- The primary accent color for the Pause Menu UI.
+            -- Accepts HEX, RGB, or standard CSS color names.
+            primary = '#beee11',
+        },
+        Camera = {
+            -- Set to false to disable the custom cinematic camera angle when opening the menu.
+            enabled  = true,
+            distance = 1.8,  -- Distance of the camera from the player
+            height   = 0.6,  -- Height offset for the camera
+            xOffset  = 0.85, -- Horizontal offset
+        },
+        Animation = {
+            -- Set to false to disable the map holding animation while in the menu.
+            enabled  = true,
+            animName = "base",
+            dictName = "amb@world_human_tourist_map@male@base",
+            propName = "prop_tourist_map_01" 
+        },
+        
+        -- The Locale file to use (located in the locales/ directory).
+        Locale = 'en',
+        
+        -- Set to true to enable debug prints in the terminal and F8 console.
+        Debug = false,
+
+        -- COMMAND & KEYBINDINGS
+        
+        -- The primary chat command used to natively open the pause menu.
+        Command = 'pausemenu',
+        
+        -- The default hotkey to open the UI. 
+        -- We highly recommend using ESCAPE to override the native GTA pause menu seamlessly.
+        Key = 'ESCAPE',
+    }
+}
+```
+
+## Server Configuration
+
+The server configuration primarily handles sensitive data such as Discord Webhook URLs and logging permissions. This is securely located in `server/serverConfig.lua`.
+
+```lua filename="server/serverConfig.lua" copy
+ServerConfig = {
+    -- ═══════════════════════════════════════════════════════════════
+    -- DISCORD WEBHOOK INTEGRATION
+    -- ═══════════════════════════════════════════════════════════════
+    Webhook = {
+        -- Set to false to completely disable all Discord logging
+        enabled   = true,
+        
+        -- The Username and Avatar that will appear on the Discord Bot's messages.
+        username  = "Prism Scripts",
+        avatarURL = "", -- Add a direct image link (e.g., https://i.imgur.com/yourimage.png)
+        
+        -- Endpoint URLs for different logging categories
+        URLs      = {
+            reports = "YOUR_WEBHOOK_URL_HERE", -- Logs for Player Reports & Admin Responses
+            admin   = "YOUR_WEBHOOK_URL_HERE", -- Logs for Menu Settings 
+            chess   = "",                      -- Logs for Chess Mini-game
+            system  = "YOUR_WEBHOOK_URL_HERE", -- System alerts (Resource Stop/Start)
+        },
+        
+        -- Decimal color codes for embed strips 
+        Colors    = {
+            -- General
+            system_start   = 3066993,  -- Green
+            system_error   = 15158332, -- Red
+            
+            -- Reports
+            report_new     = 3447003,  -- Blue
+            report_claimed = 15105570, -- Orange
+            report_closed  = 3066993,  -- Green
+            report_message = 10181046, -- Purple
+            
+            -- Admin
+            admin_config   = 15844367, -- Gold
+            admin_keybind  = 15844367, -- Gold
+            admin_tutorial = 3447003,  -- Blue
+            
+            -- Games
+            chess_start    = 3447003,  -- Blue
+            chess_end_win  = 3066993,  -- Green
+            chess_end_draw = 9807270,  -- Grey
+        }
+    }
+}
+```
+
+<Callout type="info">
+  **Important**: Do not share your Webhook URLs in client-side code. `serverConfig.lua` is automatically isolated out of reach for regular players.
+</Callout>
+
+## Death & Kill Tracking
+
+Statistics for player deaths and kills are automatically tracked via standard FiveM events. These can be customized in `client/function.lua` to suit your server's specific framework (ESX, QBCore, etc.) or custom systems.
+
+### Adjusting Death Events
+By default, we listen for `baseevents:onPlayerKilled` and `baseevents:onPlayerDied`. If your server uses a different event for deaths (e.g., `esx:onPlayerDeath`), simply swap the name inside the handler.
+
+```lua filename="client/function.lua" copy
+-- Event: Player Killed.
+AddEventHandler('baseevents:onPlayerKilled', function(killerId, data)
+    TriggerServerEvent('prism_pausemenu:server:onDeath')
+end)
+
+-- Event: Player Died (Suicide / Environment).
+AddEventHandler('baseevents:onPlayerDied', function(data)
+    TriggerServerEvent('prism_pausemenu:server:onDeath')
+end)
+```
+
+### Kill Tracking Logic
+We utilize the native `CEventNetworkEntityDamage` game engine event to accurately detect when the local player kills another real player. This is active by default and does not require an external script.
+
+```lua filename="client/function.lua" copy
+-- Event: Kill Tracker (Game engine damage event).
+AddEventHandler('gameEventTriggered', function(name, args)
+    if name == 'CEventNetworkEntityDamage' then
+        local victim = args[1]
+        local attacker = args[2]
+        local isFatal = args[6] -- 1 if dead
+        local myPed = PlayerPedId()
+
+        -- Logic: If it was a fatal hit, the attacker was me, and the victim was another player.
+        if isFatal == 1 and attacker == myPed and victim ~= myPed and IsEntityAPed(victim) and IsPedAPlayer(victim) then
+            TriggerServerEvent('prism_pausemenu:server:onKill')
+        end
+    end
+end)
+```
+

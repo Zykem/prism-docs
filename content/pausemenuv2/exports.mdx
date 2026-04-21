@@ -1,0 +1,105 @@
+import { Callout } from 'nextra/components'
+
+# Exports
+
+<div className='text-lg mt-2' style={{ color: 'rgb(185, 198, 162)' }}>
+Easy guide to using Prism Pause Menu V2 exports in your own scripts.
+</div>
+
+## Client Exports
+
+Use these in your **client scripts** to control the menu or get local player info.
+
+### Force Open Menu
+Opens the pause menu on the player's screen.
+```lua copy
+exports['prism_pausemenuv2']:openPauseMenu()
+```
+
+### Force Close Menu
+Closes the pause menu if it is open.
+```lua copy
+exports['prism_pausemenuv2']:closePauseMenu()
+```
+
+### Check UI State
+Check if the menu is currently open (Returns `true` or `false`).
+```lua copy
+local isOpen = exports['prism_pausemenuv2']:isPauseMenuOpen()
+if isOpen then
+    print("Player is looking at the menu")
+end
+```
+
+### Fetch Local Player Statistics
+Get the player's kills, deaths, and playtime data for the last 7 days.
+
+![Stats Chart](/pausemenuv2_stats.png)
+
+```lua copy
+local data = exports['prism_pausemenuv2']:getMyStats()
+
+-- Example Output:
+-- {
+--     kills    = { 5, 2, 10, 0, 0, 1, 15 }, 
+--     deaths   = { 10, 5, 2, 0, 0, 0, 1 },
+--     playtime = { 120, 60, 240, 0, 0, 30, 300 } -- In Minutes
+-- }
+```
+
+### Native Sub-Menu Routing
+Quickly open standard GTA menus (like the Map or Settings) with the cinematic camera effect.
+```lua copy
+-- Open the Map
+exports['prism_pausemenuv2']:openMap()
+
+-- Open Settings
+exports['prism_pausemenuv2']:openSettings()
+
+-- Open the Admin Report tab directly
+exports['prism_pausemenuv2']:openReportMenu()
+```
+
+---
+
+## Server Exports
+
+Use these in your **server scripts** for player data and admin tools.
+
+### Fetch Server Player Statistics
+Get the total lifetime stats of a specific player.
+```lua copy
+-- 1. Get all stats (Kills, Deaths, Playtime):
+local stats = exports['prism_pausemenuv2']:getPlayerStats(source)
+
+-- 2. Get only one specific stat (e.g., 'playtime'):
+local mins = exports['prism_pausemenuv2']:getPlayerStats(source, 'playtime')
+```
+
+### Check Admin Privileges
+Check if a player has Admin permissions on the server.
+```lua copy
+local isHost = exports['prism_pausemenuv2']:isAdmin(source) -- Returns true/false
+```
+
+### Generate System Report Ticket
+Create a new admin report automatically. This is perfect for Anti-cheat alerts or automated logs.
+```lua copy
+-- subject: Short title
+-- message: Detailed info
+exports['prism_pausemenuv2']:createSystemReport("Anti-cheat", "Player spawned a weapon.")
+```
+
+<Callout type="info">
+  **Pro Tip**: Reports made this way show up instantly for all online Admins as a high-priority "[SYSTEM]" alert.
+</Callout>
+
+### Modify Player Statistics
+Add or remove points from a player's stats (Kills, Deaths, or Playtime).
+```lua copy
+-- Add 5 kills to a player:
+exports['prism_pausemenuv2']:TriggerUpdateStatistic(source, 'kills', 5)
+
+-- Add 1 minute of playtime:
+exports['prism_pausemenuv2']:TriggerUpdateStatistic(source, 'playtime', -60)
+```

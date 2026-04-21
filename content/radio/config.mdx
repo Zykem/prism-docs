@@ -42,6 +42,9 @@ Config.DefaultSettings = {
     -- 0    = fully at the right edge
     -- ↑    = higher value moves the radio LEFT
     radio_right = 17,
+
+    -- Default saved nickname (empty string = no saved nickname)
+    savedNickname = '',
 }
 
 -- Radiolist style
@@ -49,6 +52,11 @@ Config.DefaultSettings = {
 -- 1 = advanced, with header
 -- 2 = disabled, use this if you have your own radiolist
 Config.RadiolistStyle = 1
+
+-- Should the radiolist be always expanded? (= show all members of channel)
+-- Warning: if a radio channel is going to have 15-20 members, it might get annoying to be on screen.
+-- ONLY applies to the advanced (1) radiolist style, as the minimalistic (0) style is always expanded and the disabled (2) style doesn't have a radiolist.
+Config.RadiolistExpanded = false
 
 -- Which jobs should not see the radiolist.
 Config.RadiolistJobBlacklist = {
@@ -101,11 +109,15 @@ Config.AllowNicknameChange = true
 Config.MinNicknameLength = 3
 Config.MaxNicknameLength = 20
 
+-- When true, players cannot open the settings page in the radio UI.
+Config.DisableSettings = false
+
 -- Automatically disconnect player from radio channel on death?
 Config.DisconnectOnDeath = true
 
 -- Animation while talking on radio (The User can pick the animations he likes the most in the settings tab)
 Config.UseTalkAnimation = true
+Config.AllowChange = true -- Allow users to change talk animation in settings?
 Config.TalkAnimations = {
     [1] = {
         dict = 'cellphone@',
@@ -234,5 +246,6 @@ Config.Inventory = "auto"
 
 -- Debug mode
 Config.Debug = true
+
 
 ```
